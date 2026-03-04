@@ -1,5 +1,17 @@
 \section{Schedule}
 
+We propose a structured schedule for the project, divided into six sprints, each lasting approximately three weeks. This schedule allows for iterative development, regular feedback, and continuous progress towards the project goals. 
+The timeline is designed to ensure that we can deliver a proof of concept by the end of Sprint 5, with sufficient time allocated for final report writing and submission in Sprint 6.
+Sprints are structured as follows:
+
+\begin{enumerate}
+    \item Problem understanding, first company meeting, presenting project, creating project proposal, signing NDA
+    \item Problem understanding, data exploration, researching possible solutions
+    \item Model Development - Setup and Testing
+    \item Model Development - Iteration and Improvement
+    \item Proof of concept, documentation, final presentation preparation
+    \item Final report writing and submission
+\end{enumerate}
 
 
 \definecolor{turqoise}{HTML}{3CE1C6}
@@ -8,33 +20,34 @@
 \definecolor{greenisch}{HTML}{DAF7A6}
 \definecolor{pink}{HTML}{FF81C0}
 \definecolor{bluey}{HTML}{A0C0FF}
-\definecolor{dred}{HTML}{C62744}
+\definecolor{dred}{HTML}{FF3200}
 \definecolor{dpurple}{HTML}{bb99ff}
 
 
 \begin{figure}[h!]
     \centering
     \begin{ganttchart}[
-        time slot format=isodate-yearmonth,
+        time slot format=isodate,
         vgrid,
         hgrid,
+        inline,
+        milestone inline label node/.append style={left=5mm},
         expand chart=\textwidth,
-        time slot unit=month]{2026-02}{2026-06}
+        time slot unit=day]
+        {2026-01-26 }{2026-06-25}
         \gantttitlecalendar{month=shortname} \\
-        \ganttbar[bar/.append style={fill=turqoise}]{Literature Search}{2026-02}{2026-03} \\
-        \ganttbar[bar/.append style={fill=purple}]{Model Construction}{2026-03}{2026-05} \\
-        \ganttbar[bar/.append style={fill=dred}]{Data Acquisition}{2026-03}{2026-04} \\
-        \ganttbar[bar/.append style={fill=orange}]{Model Training \& Evaluation}{2026-04}{2026-07}
-        \ganttbar[inline]{Summer Break}{2026-07}{2026-08} \\
-        \ganttbar[bar/.append style={fill=greenisch}]{Backup Plan}{2026-05}{2026-06}         
-        \ganttbar[bar/.append style={fill=greenisch, dashed}]{}{2026-07}{2026-08}\\
-        \ganttbar[bar/.append style={fill=pink}]{Data Analysis}{2026-09}{2026-10} \\
-        \ganttbar[bar/.style={fill=bluey}]{Thesis Writing}{2026-10}{2026-11} \\
-        \ganttmilestone[milestone left shift=0.1,milestone right shift=-0.1]{First Draft Submission}{2026-11} \\
-        \ganttmilestone[]{Final Submission}{2026-11} \\
-        \ganttmilestone[milestone left shift=0.1,milestone right shift=-0.1]{Thesis Defense}{2026-12}
-        \ganttvrule{Mid-term Review}{2026-04}
+        \ganttbar[bar/.append style={fill=bluey}]{Sprint 0}{2026-01-26}{2026-02-15} \\
+        \ganttbar[bar/.append style={fill=turqoise}]{Sprint 1}{2026-02-16}{2026-03-08} \\
+        \ganttbar[bar/.append style={fill=purple}]{Sprint 2}{2026-03-09}{2026-03-29} \\
+        \ganttbar[bar/.append style={fill=orange}]{Sprint 3}{2026-03-30}{2026-04-19} \\
+        \ganttbar[bar/.append style={fill=greenisch}]{Sprint 4}{2026-04-20}{2026-05-10} \\
+        \ganttbar[bar/.append style={fill=pink}]{Sprint 5}{2026-05-11}{2026-06-04} \\
+        \ganttmilestone[milestone left shift=0.1,milestone right shift=-0.1]{Final Presentation}{2026-06-04} \\
+        \ganttbar[bar/.append style={fill=dred}]{Sprint 6}{2026-06-05}{2026-06-24} \\
+        \ganttmilestone[milestone left shift=0.1,milestone right shift=-0.1]{Final Report Submission}{2026-06-24}
     \end{ganttchart}
     \caption{Estimated Schedule for the Project, with specific deadlines indicated by milestones}
     \label{fig:timetable}
 \end{figure}
+
+

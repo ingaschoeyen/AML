@@ -1,6 +1,6 @@
 \section{Project Description}
 
-The Department of Maintenance and Operations (Beheer en Onderhoud - B&O) of the province of Gelderland manages a wide range of civil engineering assets, referred to as engineering structures (“Kunstwerken”), such as bridges, viaducts, and culverts. 
+The Department of Maintenance and Operations (Beheer en Onderhoud - B\&O) of the province of Gelderland manages a wide range of civil engineering assets, referred to as engineering structures (“Kunstwerken”), such as bridges, viaducts, and culverts. 
 For these assets, original construction drawings and related technical documentation are frequently required, for example when performing structural recalculations, maintenance planning, or safety assessments. 
 Currently, asset specialists spend a significant amount of time searching for relevant archival information. 
 The documentation is stored across multiple archives on an internal network drive, each using different naming conventions, classifications, and terminology. 
@@ -20,9 +20,24 @@ This makes the retrieval of documentation a time-consuming and inefficient “tr
 
 \subsection{Approach}
 
+The project will follow an iterative, sprint-based development approach combining exploratory data analysis, prototype development, and progressive system refinement. The overall strategy is to move from understanding the archival structure and its limitations toward building a proof of concept that enhances document retrieval through artificial intelligence techniques.
+
+We aim to develop a low-cost, efficient, and user-friendly system, which is aimed at specialist users, familiar with the data and the domain.
+Thus, we emphasise simplicity and high-level user interaction, such as domain-specific filters and keywords to narrow down search results, rather than complex interfaces or advanced features that may not be necessary for the target users.
+
+In that vein, we aim to avoid the use of LLMs as well as the use of cloud-based proprietary tools, to ensure sustainability and data sovereignty.
+While a RAG-type approach is becoming a standard in search engines, based on ethical and sustainability concerns we strive to find alternatives to such solutions.
+We expect that adding this would not improve performance and would thus not be worth the human and ecological costs required for this feature. 
+Additionally, we aim to recommend the deployment of the system on a local server, to avoid any privacy concerns related to the potentially sensitive information contained in the documents.
+To that end, we will use open-source tools and libraries that can feasibly be run locally, and we will include recommendations for hardware requirements and deployment strategies in our final report, along with a discussion of the trade-offs between local and cloud-based deployment options, and our motivations for choosing a local deployment.
+
+
+
 \subsection{Methods}
 
 The methodology of this project combines classical information retrieval techniques with modern natural language processing (NLP) approaches to improve archival document search.
+
+
 Retrieval method
 Optical Character Recognition (OCR)
 Semantic Extensions (Advanced Retrieval)
@@ -32,12 +47,21 @@ Other
 
 \subsection{Design}
 
-The system will follow a modular architecture consisting of:
+The system will follow a modular architecture consisting of the following components:
+\begin{itemize}
+    \item Data Ingestion and Preprocessing: handles the ingestion of archival documents, including OCR processing for scanned documents, and preprocessing steps such as text cleaning and normalization
+    \item Metadata Extraction and Classification: extracts relevant metadata from the documents (e.g., asset type, construction date, location) and classify documents based on their content and metadata.     
+    \item Search Engine: keyword-based and semantic search capabilities, allowing users to retrieve documents based on specific terms as well as conceptual understanding.
+    \item User Interaction Interface: simple interface that allows asset specialists to input search queries, apply filters, and view results.
+\end{itemize}
 
-Data ingestion and preprocessing module
-Metadata extraction and classification module
-Search engine module (keyword-based and semantic search)
-Simple user interaction interface (proof of concept)
+As proof of concept we aim to implement a functional prototype of the system that demonstrates the core functionalities, including document ingestion, metadata extraction, and search capabilities, based on a small test dataset of archival documents.
+
+The system performs computational tasks along two different pipelines; The first extracts information from the existing documents followed by indexing and potential embedding into a vector-based database, and will handle the integration of any new documents into the archive.
+The other pipeline handles the retrieval of items from the archive, using BM25 and keyword search to retrieve the relevant documents. A potential extension could be also embedding the query with something like BGE-M3 to improve results using semantic search, this will depend on the performance that we measure.
+
+Other than that, we consider creating the front-end design to something similar to a search engine, where there is a search bar and the relevant documents appear below, ranked on relevancy. 
+It would be interesting however to highlight parts of text or take text snippets so the user can confirm in a quick glance if the document is potentially relevant or not.
 
 \subsection{Analyses}
 
