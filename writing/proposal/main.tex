@@ -2,20 +2,58 @@
 
 
 \usepackage{geometry}
-\geometry{a4paper, 
-        landscape, 
-        nomarginpar, 
-        nofoot, 
-        includehead, 
-        includefoot}
+\geometry{
+ a4paper,
+ total={170mm,257mm},
+ top=25mm,
+ left=15mm,
+ right=15mm
+ }
+\usepackage{amsmath}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[backend=biber, style=ieee]{biblatex}
+\usepackage{pgfgantt}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{fancyhdr}
+\usepackage{datetime}
+\usepackage{multicol}
+\usepackage{ragged2e}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{txfonts}
+% \usepackage{colorbox}
+\usepackage{tikz}
+\usepackage{titling}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{tabu}
+\usepackage{array}
+\usepackage{adjustbox}
+\usepackage{lscape}
+\usepackage{rotating}
+\setlength{\parskip}{1em} 
+\usepackage{etoolbox}
+\usepackage{color} %use color
 
-\usepackage{figure}
-\usepackage{subfigure}
+\titleformat*{\paragraph}{\Large\bfseries}
+\titleformat*{\subsection}{\Large\bfseries}
+\titleformat*{\subsubsection}{\Large\bfseries}
+\titleformat*{\section}{\LARGE\bfseries}
+\titleformat{\chapter}[hang]{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{1em}{} 
 
-\usepackage{biblatex}
+
+
+\bibliography{references.bib}
 
 \begin{document}
 
-    \input{}
+    \input{titlepage.tex}
+    \newpage
+    \input{project_description.tex}
+    \input{schedule.tex}
+    \printbibliography
 
 \end{document}

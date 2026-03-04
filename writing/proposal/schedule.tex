@@ -1,0 +1,40 @@
+\section{Schedule}
+
+
+
+\definecolor{turqoise}{HTML}{3CE1C6}
+\definecolor{purple}{HTML}{D9A6FF}
+\definecolor{orange}{HTML}{FFA15C}
+\definecolor{greenisch}{HTML}{DAF7A6}
+\definecolor{pink}{HTML}{FF81C0}
+\definecolor{bluey}{HTML}{A0C0FF}
+\definecolor{dred}{HTML}{C62744}
+\definecolor{dpurple}{HTML}{bb99ff}
+
+
+\begin{figure}[h!]
+    \centering
+    \begin{ganttchart}[
+        time slot format=isodate-yearmonth,
+        vgrid,
+        hgrid,
+        expand chart=\textwidth,
+        time slot unit=month]{2026-02}{2026-06}
+        \gantttitlecalendar{month=shortname} \\
+        \ganttbar[bar/.append style={fill=turqoise}]{Literature Search}{2026-02}{2026-03} \\
+        \ganttbar[bar/.append style={fill=purple}]{Model Construction}{2026-03}{2026-05} \\
+        \ganttbar[bar/.append style={fill=dred}]{Data Acquisition}{2026-03}{2026-04} \\
+        \ganttbar[bar/.append style={fill=orange}]{Model Training \& Evaluation}{2026-04}{2026-07}
+        \ganttbar[inline]{Summer Break}{2026-07}{2026-08} \\
+        \ganttbar[bar/.append style={fill=greenisch}]{Backup Plan}{2026-05}{2026-06}         
+        \ganttbar[bar/.append style={fill=greenisch, dashed}]{}{2026-07}{2026-08}\\
+        \ganttbar[bar/.append style={fill=pink}]{Data Analysis}{2026-09}{2026-10} \\
+        \ganttbar[bar/.style={fill=bluey}]{Thesis Writing}{2026-10}{2026-11} \\
+        \ganttmilestone[milestone left shift=0.1,milestone right shift=-0.1]{First Draft Submission}{2026-11} \\
+        \ganttmilestone[]{Final Submission}{2026-11} \\
+        \ganttmilestone[milestone left shift=0.1,milestone right shift=-0.1]{Thesis Defense}{2026-12}
+        \ganttvrule{Mid-term Review}{2026-04}
+    \end{ganttchart}
+    \caption{Estimated Schedule for the Project, with specific deadlines indicated by milestones}
+    \label{fig:timetable}
+\end{figure}
