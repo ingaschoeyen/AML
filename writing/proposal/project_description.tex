@@ -1,7 +1,7 @@
 \section{Project Description}
 
 The Department of Maintenance and Operations (Beheer en Onderhoud - B\&O) of the province of Gelderland manages a wide range of civil engineering assets, referred to as engineering structures (“Kunstwerken”), such as bridges, viaducts, and culverts. 
-For these assets, original construction drawings and related technical documentation are frequently required, for example when performing structural recalculations, maintenance planning, or safety assessments. 
+For these assets, original construction drawings and related technical documentation are often required when performing structural recalculations, maintenance planning, or safety assessments. 
 Currently, asset specialists spend a significant amount of time searching for relevant archival information. 
 The documentation is stored across multiple archives on an internal network drive, each using different naming conventions, classifications, and terminology. 
 There is no effective or universal search functionality available.
@@ -16,7 +16,7 @@ Here, we outline the plan for a project that strives to combine these techniques
 
 To be able to retrieve files based on keyword or semantic search queries, techniques from a number of domains are required: 
 
-Optical character recognition (OCR) techniques, which are used to extract characters from scanned versions of analog documents (both handwritten and typed) have been established for decades and have seen significant improvements in accuracy and efficiency.
+Optical character recognition (OCR) techniques, which are used to extract characters from scanned versions of analog documents (both handwritten and typed) have been established and gradually improving for decades.
 By now, a large variety of open-source OCR tools are available \cite{nazeemOpenSourceOCRLibraries2024}, as well as alternatives specifically aimed at historical documents, which standard OCR might struggle with, such as \textcite{nguyenSurveyPostOCRProcessing2021}.
 
 Once written language is digitised, the next step is transforming the unstructured collection of words and characters into a structured representation that a ML model can work with.
@@ -34,53 +34,51 @@ While metadata has become a standard tool for enriching digital objects with str
 \subsection{Aim of the Project}
 
 
-The objective of this project is to design a model that improves the retrieval of engineering documents concerning civil infrastructure assets, such as bridges, viaducts and culverts. Currently, asset specialists must manually search across multiple and inconsistent archival directories that use varying naming conventions, classifications and terminologies. As a result, retrieving construction drawings and technical documents is slow.
+The objective of this project is to design a model for the retrieval of engineering documents concerning civil infrastructure assets from distributed and inconsistent archives. 
 
-This project aims to improve document discovery and make the process faster and more reliable. The project will involve designing a model as a proof of concept to improve document search. Artificial intelligence techniques will be used to process and retrieve documents more efficiently. The main objective is to design a solution that is simple and easy to use for the end users, who are the domain experts. Furthermore, the system will also be designed to be sustainable, privacy-preserving and cost-effective. Therefore, the system will utilize open-source tools, which will ensure the privacy of the information contained within the archives.
+This project aims to improve document discovery and make the process faster and more reliable.
+We aim to develop a proof-of-concept model that employs AI techniques to process, retrieve, search for, and finaly present documents to the end users (civil engineers) efficiently. 
+Furthermore, the system should be designed to be sustainable, privacy-preserving and cost-effective. 
 
-In conclusion, the project aims to develop a lightweight retrieval system that improves the efficiency of searching engineering archives, supporting maintenance planning, structural analysis and safety assessments for civil engineering assets. By reducing the time required to find critical documentation and minimizing the risk of missing important records, the system promises to improve the work of asset specialists and improve decision-making processes. This improvement can lead to more reliable infrastructure management, faster project preparation and reduced operational delays.
+In conclusion, the project aims to develop a lightweight retrieval system that improves the efficiency of searching engineering archives for a wide range of information on Gelderland's civil engineering assets.  
+A better and faster search for such documents can lead to more reliable infrastructure management, faster project preparation and reduced operational delays.
 
 
 \section{Project Plan}
 
 \subsection{Approach}
 
-The project will follow an iterative, sprint-based development approach combining exploratory data analysis, prototype development, and progressive system refinement. The overall strategy is to move from understanding the archival structure and its limitations toward building a proof of concept that enhances document retrieval through artificial intelligence techniques.
+The project will follow an iterative, sprint-based development approach combining exploratory data analysis, prototype development, and progressive system refinement. 
+The overall strategy is to move from understanding the archival structure and its limitations toward building a proof of concept that enhances document retrieval through artificial intelligence techniques.
 
 We aim to develop a low-cost, efficient, and user-friendly system, which is aimed at specialist users, familiar with the data and the domain.
 Thus, we emphasise simplicity and high-level user interaction, such as domain-specific filters and keywords to narrow down search results, rather than complex interfaces or advanced features that may not be necessary for the target users.
 
 In that vein, we aim to avoid the use of LLMs as well as the use of cloud-based proprietary tools, to ensure sustainability and data sovereignty.
 While a RAG-type approach is becoming a standard in search engines, based on ethical and sustainability concerns we strive to find alternatives to such solutions.
-We expect that adding this would not improve performance and would thus not be worth the human and ecological costs required for this feature. 
-Additionally, we aim to recommend the deployment of the system on a local server, to avoid any privacy concerns related to the potentially sensitive information contained in the documents.
-To that end, we will use open-source tools and libraries that can feasibly be run locally, and we will include recommendations for hardware requirements and deployment strategies in our final report, along with a discussion of the trade-offs between local and cloud-based deployment options, and our motivations for choosing a local deployment.
-
-
-
+We expect that the possible performance gain from implementing such proprietary features to our specific usecase does not outweigh the human and ecological costs. 
+In general, we aim to recommend and will work towards the deployment of a complete system on a local server, relying on the insight and control provided by deploying open-source tools to manage privacy concerns acout sharing information in the documents.
 
 \subsection{Methods}
 
 The methodology of this project combines classical information retrieval techniques with modern natural language processing (NLP) approaches to improve archival document search.
 
 \subsubsection{Document Retrieval}
-The project is dependant on document retrieval. Users can use queries to search certain keywords about a project (i.e. regions, place names, specific structure types etc.)
-to retrieve documents that are related to these keywords. For this we will use the BM25 formula, which is a well-established equation to score the relevancy of documents.
+The project encompasses document retrieval. Users can use queries to search certain keywords about a project (i.e. regions, place names, specific structure types etc.)
+to retrieve related. For this we will use the BM25 formula, which is a well-established equation to score the relevancy of documents.
 We will also be creating an index for the documents. An index makes it so certain words are already linked to certain documents, speeding up current retrieval time and making the process more efficient.
 
 A possible extension that we are considering is using semantic search. With semantic search, our process is to create embeddings over both the query and the document and match these two.
 With current transformer-based embedding models it has shown to improve performance over BM25, however these models are more energy and time intensive.
 
 \subsubsection{Data extraction}
-Before we start with working on the document retrieval, we first need quality textual data. 
+Before we start with working on the document retrieval, we first need quality data. 
 Since most of the PDF files that we will be working with are quite old, we will need to somehow extract any type of textual data from these files. 
-We will be using Optical Character Recognition (OCR) methods to extract this text.
+We will be using Optical Character Recognition (OCR) methods to extract this text. As document quality is expected to differ aim to evaluate and improve data quality.
+On top of that, descriptive metadata could be generated to provide further information on each document. 
+Besides the standard date, location, size and author this could mean classifying the documents into specific document types such as; technical drawings, reports, articles etc.
 
-Besides this, the data from this model will have to be cleaned. This will be dependant on the quality of the model that we use and the amount of processing already in that model.
 We will also be looking at retaining any structures within PDF files, such as tables and legends, as this can increase performance for retrieval.
-Another possible extension, if time allows, is looking at classifying the documents into specific document types. Examples of this would be: technical drawings, reports, articles etc.
-This would then be included in the data to improve retrieval if queries include these terms.
-
 
 
 \subsection{Design}
@@ -93,20 +91,23 @@ The system will follow a modular architecture consisting of the following compon
     \item User Interaction Interface
 \end{itemize}
 
-As proof of concept we aim to implement a functional prototype of the system that demonstrates the core functionalities, including document ingestion, metadata extraction, and search capabilities, based on a small test dataset of archival documents.
+As proof of concept we aim to implement a functional prototype of the system that demonstrates the core functionalities, including document ingestion, metadata extraction, and search capabilities.
 
 The system performs computational tasks along two different pipelines; The first extracts information from the existing documents followed by indexing and potential embedding into a vector-based database, and will handle the integration of any new documents into the archive.
-The other pipeline handles the retrieval of items from the archive, using BM25 and keyword search to retrieve the relevant documents. A potential extension could be also embedding the query with something like BGE-M3 to improve results using semantic search, this will depend on the performance that we measure.
+The other pipeline handles the retrieval of items from the archive, using BM25 and keyword search to retrieve the relevant documents. 
+A potential extension could be also embedding the query with something like BGE-M3 to improve results using semantic search, this will depend on the performance that we measure.
 
-Other than that, we consider creating the front-end design to something similar to a search engine, where there is a search bar and the relevant documents appear below, ranked on relevancy. 
-It would be interesting however to highlight parts of text or take text snippets so the user can confirm in a quick glance if the document is potentially relevant or not.
+Once quality output can be guaranteed we will design the front end in careful collaboration with the end users.
+Whether the best solution would look like a search engine, or perhaps a chatbot, we can not say right now.
 
 \subsection{Analyses}
 
 The system will be evaluated both quantitatively and qualitatively.
-Quantitative Evaluation depends on the availability of labelled data, as well as the possibility to simulate realistic user interactions. To enable this, we will request the company to provide these resources, or to assist us in creating them based on their domain expertise.
+Quantitative Evaluation depends on the availability of labelled data, as well as the possibility to simulate realistic user interactions. 
+To enable this, we will request the company to provide these resources, or to assist us in creating them based on their domain expertise.
 We aim to employ the following metrics to determine whether the system reliably retrieves relevant items and does so in a more efficient way than the current manual search process:
-Qualitative Evaluation depends on the availability of realistic test queries as well as user feedback. We also request the company to provide these resources, or to assist us in creating them based on their domain expertise.
+Qualitative Evaluation depends on the availability of realistic test queries as well as user feedback. 
+We also request the company to provide these resources, or to assist us in creating them based on their domain expertise.
 
 We aim to get an estimate of the quality of the system performance based on the following:
 
