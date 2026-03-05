@@ -9,7 +9,7 @@ As a result, for each individual asset, specialists must search multiple archive
 This makes the retrieval of documentation a time-consuming and inefficient “treasure hunt.”  
 
 
-Here, we outline the plan for a project that strives to combine these techniques to implement a proof of concept for a ML-aided document retrieval system, to support the asset specialists from the province of Gelderland in their work.
+Here, we outline the plan for a project that strives to combine natural language processing (NLP) and information retrieval (IR) techniques to implement a proof of concept for a ML-aided document retrieval system, to support the asset specialists from the province of Gelderland in their work.
 
 
 \subsection{Background of the Project}
@@ -17,15 +17,14 @@ Here, we outline the plan for a project that strives to combine these techniques
 To be able to retrieve files based on keyword or semantic search queries, techniques from a number of domains are required: 
 
 Optical character recognition (OCR) techniques, which are used to extract characters from scanned versions of analog documents (both handwritten and typed) have been established and gradually improving for decades.
-By now, a large variety of open-source OCR tools are available \cite{nazeemOpenSourceOCRLibraries2024}, as well as alternatives specifically aimed at historical documents, which standard OCR might struggle with, such as \textcite{nguyenSurveyPostOCRProcessing2021}.
+By now, a large variety of open-source OCR tools are available \cite{nazeemOpenSourceOCRLibraries2024}, as well as alternatives specifically aimed at historical documents, which standard OCR might struggle with, such as presented in \textcite{nguyenSurveyPostOCRProcessing2021}.
 
 Once written language is digitised, the next step is transforming the unstructured collection of words and characters into a structured representation that a ML model can work with.
-This is enabled by the large genus of NLP techniques, which range from statistical encoding techniques, to rule-based integration, to continuous-space representations (see \textcite{patilSurveyTextRepresentation2023} for a taxonomy).
+Techniques from the domain of NLP, which range from statistical encoding techniques, to rule-based integration, to continuous-space representations (see \textcite{patilSurveyTextRepresentation2023} for a taxonomy), can be used to this end.
 Generally, they map representations of words and characters (e.g. tokens in LLMs) into a structured space in which mathematical relations between them can be inferred and used for further computation.
 
 Additionally, techniques for structuring information and efficiently working within the structure, such as information retrieval (IR) techniques and established metadata standards are required.
-Search and retrieval systems have seen significant advancements, with the development of more sophisticated indexing and ranking algorithms, as well as the integration of NLP techniques to enhance search capabilities.
-\cite{shalagin2024survey}
+Search and retrieval systems have seen significant advancements, with the development of more sophisticated indexing and ranking algorithms, as well as the integration of NLP techniques to enhance search capabilities \cite{shalagin2024survey}.
 Techniques, such as BM25 and TF-IDF, can be used to improve keyword-based search, while embedding-based approaches can be used to enable semantic search capabilities \cite{patilSurveyTextRepresentation2023}.
 
 While metadata has become a standard tool for enriching digital objects with structured information, there is a lack of standardization in the field, which hinders interoperability and requires case-by-case solutions for metadata extraction and structuring \cite{ulrichUnderstandingNatureMetadata2022}.
@@ -74,7 +73,8 @@ With current transformer-based embedding models it has shown to improve performa
 \subsubsection{Data extraction}
 Before we start with working on the document retrieval, we first need quality data. 
 Since most of the PDF files that we will be working with are quite old, we will need to somehow extract any type of textual data from these files. 
-We will be using Optical Character Recognition (OCR) methods to extract this text. As document quality is expected to differ aim to evaluate and improve data quality.
+We will be using Optical Character Recognition (OCR) methods to extract this text. 
+As document quality is expected to differ, we aim to evaluate and improve data quality.
 On top of that, descriptive metadata could be generated to provide further information on each document. 
 Besides the standard date, location, size and author this could mean classifying the documents into specific document types such as; technical drawings, reports, articles etc.
 
@@ -95,20 +95,19 @@ As proof of concept we aim to implement a functional prototype of the system tha
 
 The system performs computational tasks along two different pipelines; The first extracts information from the existing documents followed by indexing and potential embedding into a vector-based database, and will handle the integration of any new documents into the archive.
 The other pipeline handles the retrieval of items from the archive, using BM25 and keyword search to retrieve the relevant documents. 
-A potential extension could be also embedding the query with something like BGE-M3 to improve results using semantic search, this will depend on the performance that we measure.
+A potential extension could be also embedding the query with something like BGE-M3 to improve results using semantic search, which we will consider depending on the performance achieved without it.
 
 Once quality output can be guaranteed we will design the front end in careful collaboration with the end users.
-Whether the best solution would look like a search engine, or perhaps a chatbot, we can not say right now.
+Whether the best solution would look like a search engine, or perhaps a chatbot, we cannot say right now.
 
 \subsection{Analyses}
 
 The system will be evaluated both quantitatively and qualitatively.
 Quantitative Evaluation depends on the availability of labelled data, as well as the possibility to simulate realistic user interactions. 
 To enable this, we will request the company to provide these resources, or to assist us in creating them based on their domain expertise.
-We aim to employ the following metrics to determine whether the system reliably retrieves relevant items and does so in a more efficient way than the current manual search process:
 Qualitative Evaluation depends on the availability of realistic test queries as well as user feedback. 
 We also request the company to provide these resources, or to assist us in creating them based on their domain expertise.
 
-We aim to get an estimate of the quality of the system performance based on the following:
+We aim to get an estimate of the quantitative and qualitative performance of the system based on the following tests and metrics:
 
 \input{table_analysis.tex}

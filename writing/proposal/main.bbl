@@ -60,12 +60,12 @@
       \list{publisher}{1}{%
         {NLP Association of India (NLPAI)}%
       }
-      \strng{namehash}{bd388832be27a418bc7f96f379740917}
+      \strng{namehash}{cde3c0f5ded0800b07eb5decd5dc4773}
       \strng{fullhash}{ff1fc099c60bd78ed8256cd6316a2cc2}
       \strng{fullhashraw}{ff1fc099c60bd78ed8256cd6316a2cc2}
       \strng{bibnamehash}{ff1fc099c60bd78ed8256cd6316a2cc2}
       \strng{authorbibnamehash}{ff1fc099c60bd78ed8256cd6316a2cc2}
-      \strng{authornamehash}{bd388832be27a418bc7f96f379740917}
+      \strng{authornamehash}{cde3c0f5ded0800b07eb5decd5dc4773}
       \strng{authorfullhash}{ff1fc099c60bd78ed8256cd6316a2cc2}
       \strng{authorfullhashraw}{ff1fc099c60bd78ed8256cd6316a2cc2}
       \strng{editorbibnamehash}{f19c3ea6b503809f4c935229a439319f}
@@ -123,12 +123,12 @@
            given={Antoine},
            giveni={A\bibinitperiod}}}%
       }
-      \strng{namehash}{c4812351340e0e66d72d4e9df55b8824}
+      \strng{namehash}{8899eb7ca38e3062fa367c656e190542}
       \strng{fullhash}{2e543045a5213b7f791e6d71668c0ae3}
       \strng{fullhashraw}{2e543045a5213b7f791e6d71668c0ae3}
       \strng{bibnamehash}{2e543045a5213b7f791e6d71668c0ae3}
       \strng{authorbibnamehash}{2e543045a5213b7f791e6d71668c0ae3}
-      \strng{authornamehash}{c4812351340e0e66d72d4e9df55b8824}
+      \strng{authornamehash}{8899eb7ca38e3062fa367c656e190542}
       \strng{authorfullhash}{2e543045a5213b7f791e6d71668c0ae3}
       \strng{authorfullhashraw}{2e543045a5213b7f791e6d71668c0ae3}
       \field{sortinit}{2}
@@ -187,16 +187,16 @@
            given={Jagadeesh},
            giveni={J\bibinitperiod}}}%
       }
-      \strng{namehash}{faa0420d8d3cca346dec106447ac4ac1}
+      \strng{namehash}{cd12fc57527d5453d46009f53e92e992}
       \strng{fullhash}{64f95792ea952457b524e2fa2f9c275e}
       \strng{fullhashraw}{64f95792ea952457b524e2fa2f9c275e}
       \strng{bibnamehash}{64f95792ea952457b524e2fa2f9c275e}
       \strng{authorbibnamehash}{64f95792ea952457b524e2fa2f9c275e}
-      \strng{authornamehash}{faa0420d8d3cca346dec106447ac4ac1}
+      \strng{authornamehash}{cd12fc57527d5453d46009f53e92e992}
       \strng{authorfullhash}{64f95792ea952457b524e2fa2f9c275e}
       \strng{authorfullhashraw}{64f95792ea952457b524e2fa2f9c275e}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{abstract}{Natural Language Processing (NLP) is a research field where a language in consideration is processed to understand its syntactic, semantic, and sentimental aspects. The advancement in the NLP area has helped solve problems in the domains such as Neural Machine Translation, Name Entity Recognition, Sentiment Analysis, and Chatbots, to name a few. The topic of NLP broadly consists of two main parts: the representation of the input text (raw data) into numerical format (vectors or matrix) and the design of models for processing the numerical data. This paper focuses on the former part and surveys how the NLP field has evolved from rule-based, statistical to more context-sensitive learned representations. For each embedding type, we list their representation, issues they addressed, limitations, and applications. This survey covers the history of text representations from the 1970s and onwards, from regular expressions to the latest vector representations used to encode the raw text data. It demonstrates how the NLP field progressed from where it could comprehend just bits and pieces to all the significant aspects of the text over time.}
@@ -242,8 +242,8 @@
       \strng{authornamehash}{8f0f54224ea5c86cbf6aeecf8bb92111}
       \strng{authorfullhash}{8f0f54224ea5c86cbf6aeecf8bb92111}
       \strng{authorfullhashraw}{8f0f54224ea5c86cbf6aeecf8bb92111}
-      \field{sortinit}{6}
-      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{International Journal of Open Information Technologies}
@@ -320,16 +320,16 @@
       \list{publisher}{1}{%
         {JMIR Publications Inc., Toronto, Canada}%
       }
-      \strng{namehash}{7d63811925746d78f15ee921710d74ec}
+      \strng{namehash}{902e2088a4d2f2e479071216f8ecbd7c}
       \strng{fullhash}{4066a52f64db9349f99378a0db978d4b}
       \strng{fullhashraw}{4066a52f64db9349f99378a0db978d4b}
-      \strng{bibnamehash}{7d63811925746d78f15ee921710d74ec}
-      \strng{authorbibnamehash}{7d63811925746d78f15ee921710d74ec}
-      \strng{authornamehash}{7d63811925746d78f15ee921710d74ec}
+      \strng{bibnamehash}{902e2088a4d2f2e479071216f8ecbd7c}
+      \strng{authorbibnamehash}{902e2088a4d2f2e479071216f8ecbd7c}
+      \strng{authornamehash}{902e2088a4d2f2e479071216f8ecbd7c}
       \strng{authorfullhash}{4066a52f64db9349f99378a0db978d4b}
       \strng{authorfullhashraw}{4066a52f64db9349f99378a0db978d4b}
-      \field{sortinit}{8}
-      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{shorttitle}
       \field{abstract}{Background: Metadata are created to describe the corresponding data in a detailed and unambiguous way and is used for various applications in different research areas, for example, data identification and classification. However, a clear definition of metadata is crucial for further use. Unfortunately, extensive experience with the processing and management of metadata has shown that the term “metadata” and its use is not always unambiguous. Objective: This study aimed to understand the definition of metadata and the challenges resulting from metadata reuse. Methods: A systematic literature search was performed in this study following the PRISMA (Preferred Reporting Items for Systematic Reviews and Meta-Analyses) guidelines for reporting on systematic reviews. Five research questions were identified to streamline the review process, addressing metadata characteristics, metadata standards, use cases, and problems encountered. This review was preceded by a harmonization process to achieve a general understanding of the terms used. Results: The harmonization process resulted in a clear set of definitions for metadata processing focusing on data integration. The following literature review was conducted by 10 reviewers with different backgrounds and using the harmonized definitions. This study included 81 peer-reviewed papers from the last decade after applying various filtering steps to identify the most relevant papers. The 5 research questions could be answered, resulting in a broad overview of the standards, use cases, problems, and corresponding solutions for the application of metadata in different research areas. Conclusions: Metadata can be a powerful tool for identifying, describing, and processing information, but its meaningful creation is costly and challenging. This review process uncovered many standards, use cases, problems, and solutions for dealing with metadata. The presented harmonized definitions and the new schema have the potential to improve the classification and generation of metadata by creating a shared understanding of metadata and its context.}
