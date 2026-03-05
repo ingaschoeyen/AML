@@ -100,6 +100,70 @@
       \verb https://aclanthology.org/2024.icon-1.48/
       \endverb
     \endentry
+    \entry{nguyenSurveyPostOCRProcessing2021}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=1ba32218919aadd539539f8870bc9c1b}{%
+           family={Nguyen},
+           familyi={N\bibinitperiod},
+           given={Thi\bibnamedelimb Tuyet\bibnamedelima Hai},
+           giveni={T\bibinitperiod\bibinitdelim T\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=3594d5be5bc84376af82ee5bad5230c6}{%
+           family={Jatowt},
+           familyi={J\bibinitperiod},
+           given={Adam},
+           giveni={A\bibinitperiod}}}%
+        {{hash=aad9d516f3f9b6fba66bf4b46c12bbb6}{%
+           family={Coustaty},
+           familyi={C\bibinitperiod},
+           given={Mickael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=b90d13f2d8d60fbf9aca5a608866288b}{%
+           family={Doucet},
+           familyi={D\bibinitperiod},
+           given={Antoine},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{8899eb7ca38e3062fa367c656e190542}
+      \strng{fullhash}{2e543045a5213b7f791e6d71668c0ae3}
+      \strng{fullhashraw}{2e543045a5213b7f791e6d71668c0ae3}
+      \strng{bibnamehash}{2e543045a5213b7f791e6d71668c0ae3}
+      \strng{authorbibnamehash}{2e543045a5213b7f791e6d71668c0ae3}
+      \strng{authornamehash}{8899eb7ca38e3062fa367c656e190542}
+      \strng{authorfullhash}{2e543045a5213b7f791e6d71668c0ae3}
+      \strng{authorfullhashraw}{2e543045a5213b7f791e6d71668c0ae3}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Optical character recognition (OCR) is one of the most popular techniques used for converting printed documents into machine-readable ones. While OCR engines can do well with modern text, their performance is unfortunately significantly reduced on historical materials. Additionally, many texts have already been processed by various out-of-date digitisation techniques. As a consequence, digitised texts are noisy and need to be post-corrected. This article clarifies the importance of enhancing quality of OCR results by studying their effects on information retrieval and natural language processing applications. We then define the post-OCR processing problem, illustrate its typical pipeline, and review the state-of-the-art post-OCR processing approaches. Evaluation metrics, accessible datasets, language resources, and useful toolkits are also reported. Furthermore, the work identifies the current trend and outlines some research directions of this field.}
+      \field{day}{13}
+      \field{issn}{0360-0300}
+      \field{journaltitle}{ACM Comput. Surv.}
+      \field{month}{7}
+      \field{number}{6}
+      \field{title}{Survey of {{Post-OCR Processing Approaches}}}
+      \field{urlday}{4}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{54}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{124:1\bibrangedash 124:37}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1145/3453476
+      \endverb
+      \verb{file}
+      \verb /Users/ingaschoyen/Library/Mobile Documents/com~apple~CloudDocs/Zotero/storage/NVGWZ47H/Nguyen et al. - 2021 - Survey of Post-OCR Processing Approaches.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/10.1145/3453476
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/10.1145/3453476
+      \endverb
+    \endentry
     \entry{patilSurveyTextRepresentation2023}{article}{}{}
       \name{author}{4}{}{%
         {{hash=f1949ddddd77e5bbc2b907a395ba9fd8}{%
@@ -131,8 +195,8 @@
       \strng{authornamehash}{cd12fc57527d5453d46009f53e92e992}
       \strng{authorfullhash}{64f95792ea952457b524e2fa2f9c275e}
       \strng{authorfullhashraw}{64f95792ea952457b524e2fa2f9c275e}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{abstract}{Natural Language Processing (NLP) is a research field where a language in consideration is processed to understand its syntactic, semantic, and sentimental aspects. The advancement in the NLP area has helped solve problems in the domains such as Neural Machine Translation, Name Entity Recognition, Sentiment Analysis, and Chatbots, to name a few. The topic of NLP broadly consists of two main parts: the representation of the input text (raw data) into numerical format (vectors or matrix) and the design of models for processing the numerical data. This paper focuses on the former part and surveys how the NLP field has evolved from rule-based, statistical to more context-sensitive learned representations. For each embedding type, we list their representation, issues they addressed, limitations, and applications. This survey covers the history of text representations from the 1970s and onwards, from regular expressions to the latest vector representations used to encode the raw text data. It demonstrates how the NLP field progressed from where it could comprehend just bits and pieces to all the significant aspects of the text over time.}
@@ -264,8 +328,8 @@
       \strng{authornamehash}{902e2088a4d2f2e479071216f8ecbd7c}
       \strng{authorfullhash}{4066a52f64db9349f99378a0db978d4b}
       \strng{authorfullhashraw}{4066a52f64db9349f99378a0db978d4b}
-      \field{sortinit}{5}
-      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{shorttitle}
       \field{abstract}{Background: Metadata are created to describe the corresponding data in a detailed and unambiguous way and is used for various applications in different research areas, for example, data identification and classification. However, a clear definition of metadata is crucial for further use. Unfortunately, extensive experience with the processing and management of metadata has shown that the term “metadata” and its use is not always unambiguous. Objective: This study aimed to understand the definition of metadata and the challenges resulting from metadata reuse. Methods: A systematic literature search was performed in this study following the PRISMA (Preferred Reporting Items for Systematic Reviews and Meta-Analyses) guidelines for reporting on systematic reviews. Five research questions were identified to streamline the review process, addressing metadata characteristics, metadata standards, use cases, and problems encountered. This review was preceded by a harmonization process to achieve a general understanding of the terms used. Results: The harmonization process resulted in a clear set of definitions for metadata processing focusing on data integration. The following literature review was conducted by 10 reviewers with different backgrounds and using the harmonized definitions. This study included 81 peer-reviewed papers from the last decade after applying various filtering steps to identify the most relevant papers. The 5 research questions could be answered, resulting in a broad overview of the standards, use cases, problems, and corresponding solutions for the application of metadata in different research areas. Conclusions: Metadata can be a powerful tool for identifying, describing, and processing information, but its meaningful creation is costly and challenging. This review process uncovered many standards, use cases, problems, and solutions for dealing with metadata. The presented harmonized definitions and the new schema have the potential to improve the classification and generation of metadata by creating a shared understanding of metadata and its context.}

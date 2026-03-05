@@ -9,29 +9,27 @@ As a result, for each individual asset, specialists must search multiple archive
 This makes the retrieval of documentation a time-consuming and inefficient “treasure hunt.”  
 
 
-Recent advances in natural language processing (NLP) and information retrieval (IR) techniques offer promising advantages for improving the search and retrieval of documents in such complex archival systems.
-Additionally, techniques for extracting and structuring information from unstructured data, such as optical character recognition (OCR) for scanned historical documents, can help in making the content of these archives more accessible and searchable.
-
 Here, we outline the plan for a project that strives to combine these techniques to implement a proof of concept for a ML-aided document retrieval system, to support the asset specialists from the province of Gelderland in their work.
 
 
 \subsection{Background of the Project}
 
-To begin with, we briefly review the established techniques in the fields of NLP, IR, and OCR which are possible candidates for our project, as well as the current state-of-the-art implementations of these.
+To be able to retrieve files based on keyword or semantic search queries, techniques from a number of domains are required: 
 
-OCR techniques have been established for decades and have seen significant improvements in accuracy and efficiency throughout these.
-By now, a large variety of open-source OCR tools are available \cite{nazeemOpenSourceOCRLibraries2024}
+Optical character recognition (OCR) techniques, which are used to extract characters from scanned versions of analog documents (both handwritten and typed) have been established for decades and have seen significant improvements in accuracy and efficiency.
+By now, a large variety of open-source OCR tools are available \cite{nazeemOpenSourceOCRLibraries2024}, as well as alternatives specifically aimed at historical documents, which standard OCR might struggle with, such as \textcite{nguyenSurveyPostOCRProcessing2021}.
 
-NLP encompasses a wide range of techniques for processing and understanding human language, that allow to turn unstructured text into structured data that can be more easily processed and retrieved.
-While LLMs currently represent the state-of-the-art in NLP, they are not the only option for improving document retrieval, and they may not be the most suitable for our use case, due to their high computational requirements and potential privacy concerns.
-Other techniques, such as BM25 and TF-IDF, can be used to improve keyword-based search, while embedding-based approaches can be used to enable semantic search capabilities \cite{patilSurveyTextRepresentation2023}.
-Of particular interest to our use case, \textcite{patilSurveyTextRepresentation2023} outlines how domain-specific and knowledge-enriched embeddings are particularly useful in capturing semantic and syntactical relationships, by using local contextual information and external knowledge sources, such as Wikipedia.
+Once written language is digitised, the next step is transforming the unstructured collection of words and characters into a structured representation that a ML model can work with.
+This is enabled by the large genus of NLP techniques, which range from statistical encoding techniques, to rule-based integration, to continuous-space representations (see \textcite{patilSurveyTextRepresentation2023} for a taxonomy).
+Generally, they map representations of words and characters (e.g. tokens in LLMs) into a structured space in which mathematical relations between them can be inferred and used for further computation.
 
-Search and retrieval systems have also seen significant advancements, with the development of more sophisticated indexing and ranking algorithms, as well as the integration of NLP techniques to enhance search capabilities.
+Additionally, techniques for structuring information and efficiently working within the structure, such as information retrieval (IR) techniques and established metadata standards are required.
+Search and retrieval systems have seen significant advancements, with the development of more sophisticated indexing and ranking algorithms, as well as the integration of NLP techniques to enhance search capabilities.
 \cite{shalagin2024survey}
+Techniques, such as BM25 and TF-IDF, can be used to improve keyword-based search, while embedding-based approaches can be used to enable semantic search capabilities \cite{patilSurveyTextRepresentation2023}.
 
-Lastly, while metadata has become a standard tool for enriching digital objects with structured information, there is a lack of standardization in the field, which hinders interoperability and requires case-by-case solutions for metadata extraction and structuring \cite{ulrichUnderstandingNatureMetadata2022}.
-While this thus suggests that we need to develop a custom solution for our use case, we take inspiration from domain-relevant implementations, such as the work of ...
+While metadata has become a standard tool for enriching digital objects with structured information, there is a lack of standardization in the field, which hinders interoperability and requires case-by-case solutions for metadata extraction and structuring \cite{ulrichUnderstandingNatureMetadata2022}.
+\textcite{patilSurveyTextRepresentation2023} discuss a possible workaround to this, outlining how domain-specific and knowledge-enriched embeddings are particularly useful in capturing semantic and syntactical relationships, by using local contextual information and external knowledge sources, such as Wikipedia.
 
 \subsection{Aim of the Project}
 
