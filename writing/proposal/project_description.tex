@@ -7,6 +7,8 @@ The documentation is stored across multiple archives on an internal network driv
 There is no effective or universal search functionality available.
 As a result, for each individual asset, specialists must search multiple archives using different search terms, without certainty about which archive contains the required information, or whether the information exists at all. 
 This makes the retrieval of documentation a time-consuming and inefficient “treasure hunt.”  
+
+
 Recent advances in natural language processing (NLP) and information retrieval (IR) techniques offer promising advantages for improving the search and retrieval of documents in such complex archival systems.
 Additionally, techniques for extracting and structuring information from unstructured data, such as optical character recognition (OCR) for scanned historical documents, can help in making the content of these archives more accessible and searchable.
 
@@ -95,10 +97,10 @@ This would then be included in the data to improve retrieval if queries include 
 
 The system will follow a modular architecture consisting of the following components:
 \begin{itemize}
-    \item Data Ingestion and Preprocessing: handles the ingestion of archival documents, including OCR processing for scanned documents, and preprocessing steps such as text cleaning and normalization
-    \item Metadata Extraction and Classification: extracts relevant metadata from the documents (e.g., asset type, construction date, location) and classify documents based on their content and metadata.     
-    \item Search Engine: keyword-based and semantic search capabilities, allowing users to retrieve documents based on specific terms as well as conceptual understanding.
-    \item User Interaction Interface: simple interface that allows asset specialists to input search queries, apply filters, and view results.
+    \item Data Ingestion and Preprocessing
+    \item Metadata Extraction and Classification     
+    \item Search Engine
+    \item User Interaction Interface
 \end{itemize}
 
 As proof of concept we aim to implement a functional prototype of the system that demonstrates the core functionalities, including document ingestion, metadata extraction, and search capabilities, based on a small test dataset of archival documents.
@@ -114,22 +116,8 @@ It would be interesting however to highlight parts of text or take text snippets
 The system will be evaluated both quantitatively and qualitatively.
 Quantitative Evaluation depends on the availability of labelled data, as well as the possibility to simulate realistic user interactions. To enable this, we will request the company to provide these resources, or to assist us in creating them based on their domain expertise.
 We aim to employ the following metrics to determine whether the system reliably retrieves relevant items and does so in a more efficient way than the current manual search process:
-
-\begin{itemize}
-    \item Precision and recall of retrieved documents.
-    \item F1-score for classification tasks.
-    \item Comparison of baseline keyword search versus semantic search performance.
-    \item Measurement of average retrieval time.
-    \item Reduction in manual search effort (simulated task comparison).
-\end{itemize}
-
-
 Qualitative Evaluation depends on the availability of realistic test queries as well as user feedback. We also request the company to provide these resources, or to assist us in creating them based on their domain expertise.
 
 We aim to get an estimate of the quality of the system performance based on the following:
 
-\begin{itemize}
-    \item Relevance assessment of retrieved documents.
-    \item User feedback from asset specialists (if available).
-    \item Assessment of usability and clarity of results.
-\end{itemize}
+\input{table_analysis.tex}

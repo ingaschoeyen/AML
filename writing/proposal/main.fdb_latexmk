@@ -1,13 +1,13 @@
 # Fdb version 4
-["biber main"] 1772706338.40053 "main.bcf" "main.bbl" "main" 1772706577.00526 0
+["biber main"] 1772715985.41223 "main.bcf" "main.bbl" "main" 1772716191.27529 0
   "AppML.bib" 1772704427.99943 23519 2ddb9cd2723c2edbdf09b4c4aa42eb55 ""
-  "main.bcf" 1772706576.9236 108233 9af83c22fc7284317a46bbfc5da3ed86 "pdflatex"
+  "main.bcf" 1772716191.19007 108233 9af83c22fc7284317a46bbfc5da3ed86 "pdflatex"
   "references.bib" 1772625520.80784 257 1043dfd49b63762c73263615dc178d22 ""
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1772706575.46944 "/Users/ingaschoyen/AML_wrapper/AML/writing/proposal/main.tex" "main.pdf" "main" 1772706577.00554 0
+["pdflatex"] 1772716189.71952 "/Users/ingaschoyen/AML_wrapper/AML/writing/proposal/main.tex" "main.pdf" "main" 1772716191.27559 0
   "/Users/ingaschoyen/AML_wrapper/AML/writing/proposal/main.tex" 1772706511.10178 1176 cddc0f2e0226e4b7c2829b8a7e0c7c07 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -243,13 +243,14 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1764944079 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1764944048 3345738 aba55dd26589ecf8ec9e4a91fc4d9727 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "main.aux" 1772706576.92024 2693 6f452dff703fd3e1cf0fb36333a90b5b "pdflatex"
-  "main.bbl" 1772706340.18504 16656 39235b668fff8bf3bdb11a347d1437dd "biber main"
-  "main.out" 1772706576.92088 1050 f036ac0b3c3285243b64cf8675833941 "pdflatex"
-  "main.run.xml" 1772706576.92425 2431 7abe2df1d3828bc6aba7e72d506429eb "pdflatex"
+  "main.aux" 1772716191.18654 2960 c8ed0ab5a21669f4fd0638b14e8490be "pdflatex"
+  "main.bbl" 1772715987.33054 16656 39235b668fff8bf3bdb11a347d1437dd "biber main"
+  "main.out" 1772716191.18723 1357 6ec0b62f288c28b277510f6941e51aec "pdflatex"
+  "main.run.xml" 1772716191.19097 2431 7abe2df1d3828bc6aba7e72d506429eb "pdflatex"
   "main.tex" 1772706511.10178 1176 cddc0f2e0226e4b7c2829b8a7e0c7c07 ""
-  "project_description.tex" 1772705833.2035 11734 7be5db7316f7c44f14d59123689e99a0 ""
+  "project_description.tex" 1772715950.85161 12413 c52e15fbfc9a4c4540ca1bc8d26550ac ""
   "schedule.tex" 1772629871.52107 2557 5841bd2ebe8cbe64fb8af39fd53cd39b ""
+  "table_analysis.tex" 1772716189.53846 719 e16588b7ad5389f9b03c1bc3f521ee10 ""
   "titlepage.tex" 1772706575.27212 916 abd8c359459819aa215366082af151e2 ""
   (generated)
   "main.aux"
