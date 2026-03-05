@@ -66,16 +66,29 @@ To that end, we will use open-source tools and libraries that can feasibly be ru
 
 
 
+
 \subsection{Methods}
 
 The methodology of this project combines classical information retrieval techniques with modern natural language processing (NLP) approaches to improve archival document search.
 
+\subsubsection{Document Retrieval}
+The project is dependant on document retrieval. Users can use queries to search certain keywords about a project (i.e. regions, place names, specific structure types etc.)
+to retrieve documents that are related to these keywords. For this we will use the BM25 formula, which is a well-established equation to score the relevancy of documents.
+We will also be creating an index for the documents. An index makes it so certain words are already linked to certain documents, speeding up current retrieval time and making the process more efficient.
 
-Retrieval method
-Optical Character Recognition (OCR)
-Semantic Extensions (Advanced Retrieval)
-Metadata Structuring
-Other
+A possible extension that we are considering is using semantic search. With semantic search, our process is to create embeddings over both the query and the document and match these two.
+With current transformer-based embedding models it has shown to improve performance over BM25, however these models are more energy and time intensive.
+
+\subsubsection{Data extraction}
+Before we start with working on the document retrieval, we first need quality textual data. 
+Since most of the PDF files that we will be working with are quite old, we will need to somehow extract any type of textual data from these files. 
+We will be using Optical Character Recognition (OCR) methods to extract this text.
+
+Besides this, the data from this model will have to be cleaned. This will be dependant on the quality of the model that we use and the amount of processing already in that model.
+We will also be looking at retaining any structures within PDF files, such as tables and legends, as this can increase performance for retrieval.
+Another possible extension, if time allows, is looking at classifying the documents into specific document types. Examples of this would be: technical drawings, reports, articles etc.
+This would then be included in the data to improve retrieval if queries include these terms.
+
 
 
 \subsection{Design}
