@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[10pt]{article}
 
 
 \usepackage{geometry}
@@ -38,15 +38,16 @@
 \usepackage{etoolbox}
 \usepackage{color} %use color
 
-\titleformat*{\paragraph}{\Large\bfseries}
-\titleformat*{\subsection}{\Large\bfseries}
-\titleformat*{\subsubsection}{\Large\bfseries}
-\titleformat*{\section}{\LARGE\bfseries}
-\titleformat{\chapter}[hang]{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{1em}{} 
+\setlength{\parskip}{3pt}
 
 
+\bibliography{references.bib, AppML.bib}
 
-\bibliography{references.bib}
+
+\pagestyle{fancy}
+\fancyhead[L]{AML Project Proposal}
+\fancyhead[C]{Team 4}
+\fancyhead[R]{Submitted on: \today}
 
 \begin{document}
 

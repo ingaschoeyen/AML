@@ -19,6 +19,149 @@
 
 \refsection{0}
   \datalist[entry]{none/global//global/global/global}
+    \entry{nazeemOpenSourceOCRLibraries2024}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=74bce5ff596dc28ad7d1fc79e62d0d74}{%
+           family={Nazeem},
+           familyi={N\bibinitperiod},
+           given={Meharuniza},
+           giveni={M\bibinitperiod}}}%
+        {{hash=3fdd11a14f995c1db8193de0be3053cb}{%
+           family={R},
+           familyi={R\bibinitperiod},
+           given={Anitha},
+           giveni={A\bibinitperiod}}}%
+        {{hash=37c5c9f62d42a8dd3ec153c41d7069a6}{%
+           family={S},
+           familyi={S\bibinitperiod},
+           given={Navaneeth},
+           giveni={N\bibinitperiod}}}%
+        {{hash=ec82bb7657df5eab49a8d1660b9ba713}{%
+           family={R.\bibnamedelimi R},
+           familyi={R\bibinitperiod\bibinitdelim R\bibinitperiod},
+           given={Rajeev},
+           giveni={R\bibinitperiod}}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=63c6ecfd65de8cbb2f81ce8fa8c2e13e}{%
+           family={Lalitha\bibnamedelima Devi},
+           familyi={L\bibinitperiod\bibinitdelim D\bibinitperiod},
+           given={Sobha},
+           giveni={S\bibinitperiod}}}%
+        {{hash=b87b41eb2f9ce1142a962046afb0f1a0}{%
+           family={Arora},
+           familyi={A\bibinitperiod},
+           given={Karunesh},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {AU-KBC Research Centre, Chennai, India}%
+      }
+      \list{publisher}{1}{%
+        {NLP Association of India (NLPAI)}%
+      }
+      \strng{namehash}{cde3c0f5ded0800b07eb5decd5dc4773}
+      \strng{fullhash}{ff1fc099c60bd78ed8256cd6316a2cc2}
+      \strng{fullhashraw}{ff1fc099c60bd78ed8256cd6316a2cc2}
+      \strng{bibnamehash}{ff1fc099c60bd78ed8256cd6316a2cc2}
+      \strng{authorbibnamehash}{ff1fc099c60bd78ed8256cd6316a2cc2}
+      \strng{authornamehash}{cde3c0f5ded0800b07eb5decd5dc4773}
+      \strng{authorfullhash}{ff1fc099c60bd78ed8256cd6316a2cc2}
+      \strng{authorfullhashraw}{ff1fc099c60bd78ed8256cd6316a2cc2}
+      \strng{editorbibnamehash}{f19c3ea6b503809f4c935229a439319f}
+      \strng{editornamehash}{f19c3ea6b503809f4c935229a439319f}
+      \strng{editorfullhash}{f19c3ea6b503809f4c935229a439319f}
+      \strng{editorfullhashraw}{f19c3ea6b503809f4c935229a439319f}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{This paper reviews numerous OCR programs and libraries employed for optical character recognition tasks. Tesser- act OCR, an open-source program that supports multiple lan- guages and image formats, is highlighted for its accuracy and adaptability. Python-based libraries like EasyOCR, MMOCR, and PaddleOCR are also mentioned, which provide user-friendly interfaces and trained models for text extraction, detection, and recognition. EasyOCR emphasizes ease of use and sim- plicity, while MMOCR and PaddleOCR offer comprehensive OCR capabilities and support for a wide range of languages. According to our study, which evaluates various OCR libraries, Tesseract OCR performs remarkably well in terms of accuracy for Indian languages like Malayalam. We focused on five OCR libraries—Tesseract OCR, MMOCR, PaddleOCR, EasyOCR, and Keras OCR—and tested them across several languages, including English, Hindi, Arabic, Tamil, and Malayalam. During our comparison, we found that Tesseract OCR was the only library that supported the Malayalam language. While the other libraries did not support Malayalam, Tesseract OCR performed well across all tested languages, achieving accuracy rates of 92\% in English, 93\% in Hindi, 78\% in Tamil, 74\% in Arabic, and 93\% in Malayalam.}
+      \field{booktitle}{Proceedings of the 21st {{International Conference}} on {{Natural Language Processing}} ({{ICON}})}
+      \field{eventtitle}{{{ICON}} 2024}
+      \field{month}{12}
+      \field{shorttitle}{Open-{{Source OCR Libraries}}}
+      \field{title}{Open-{{Source OCR Libraries}}: {{A Comprehensive Study}} for {{Low Resource Language}}}
+      \field{urlday}{4}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{416\bibrangedash 421}
+      \range{pages}{6}
+      \verb{file}
+      \verb /Users/ingaschoyen/Library/Mobile Documents/com~apple~CloudDocs/Zotero/storage/F7GTZUJW/Nazeem et al. - 2024 - Open-Source OCR Libraries A Comprehensive Study for Low Resource Language.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://aclanthology.org/2024.icon-1.48/
+      \endverb
+      \verb{url}
+      \verb https://aclanthology.org/2024.icon-1.48/
+      \endverb
+    \endentry
+    \entry{patilSurveyTextRepresentation2023}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=f1949ddddd77e5bbc2b907a395ba9fd8}{%
+           family={Patil},
+           familyi={P\bibinitperiod},
+           given={Rajvardhan},
+           giveni={R\bibinitperiod}}}%
+        {{hash=17744c335b9fdfb9168c48e362d0787a}{%
+           family={Boit},
+           familyi={B\bibinitperiod},
+           given={Sorio},
+           giveni={S\bibinitperiod}}}%
+        {{hash=7f6bd77b825599b39ab0ed3c8f109adb}{%
+           family={Gudivada},
+           familyi={G\bibinitperiod},
+           given={Venkat},
+           giveni={V\bibinitperiod}}}%
+        {{hash=e0a844ac28b6a81fa902b6aa5111505c}{%
+           family={Nandigam},
+           familyi={N\bibinitperiod},
+           given={Jagadeesh},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{cd12fc57527d5453d46009f53e92e992}
+      \strng{fullhash}{64f95792ea952457b524e2fa2f9c275e}
+      \strng{fullhashraw}{64f95792ea952457b524e2fa2f9c275e}
+      \strng{bibnamehash}{64f95792ea952457b524e2fa2f9c275e}
+      \strng{authorbibnamehash}{64f95792ea952457b524e2fa2f9c275e}
+      \strng{authornamehash}{cd12fc57527d5453d46009f53e92e992}
+      \strng{authorfullhash}{64f95792ea952457b524e2fa2f9c275e}
+      \strng{authorfullhashraw}{64f95792ea952457b524e2fa2f9c275e}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Natural Language Processing (NLP) is a research field where a language in consideration is processed to understand its syntactic, semantic, and sentimental aspects. The advancement in the NLP area has helped solve problems in the domains such as Neural Machine Translation, Name Entity Recognition, Sentiment Analysis, and Chatbots, to name a few. The topic of NLP broadly consists of two main parts: the representation of the input text (raw data) into numerical format (vectors or matrix) and the design of models for processing the numerical data. This paper focuses on the former part and surveys how the NLP field has evolved from rule-based, statistical to more context-sensitive learned representations. For each embedding type, we list their representation, issues they addressed, limitations, and applications. This survey covers the history of text representations from the 1970s and onwards, from regular expressions to the latest vector representations used to encode the raw text data. It demonstrates how the NLP field progressed from where it could comprehend just bits and pieces to all the significant aspects of the text over time.}
+      \field{issn}{2169-3536}
+      \field{journaltitle}{IEEE Access}
+      \field{title}{A {{Survey}} of {{Text Representation}} and {{Embedding Techniques}} in {{NLP}}}
+      \field{urlday}{4}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{11}
+      \field{year}{2023}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{36120\bibrangedash 36146}
+      \range{pages}{27}
+      \verb{doi}
+      \verb 10.1109/ACCESS.2023.3266377
+      \endverb
+      \verb{file}
+      \verb /Users/ingaschoyen/Library/Mobile Documents/com~apple~CloudDocs/Zotero/storage/P39N72RV/Patil et al. - 2023 - A Survey of Text Representation and Embedding Techniques in NLP.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/abstract/document/10098736
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/abstract/document/10098736
+      \endverb
+      \keyw{Electronic mail,embeddings,Grammar,Indexes,language models,literature review,Natural language processing,NLP,Semantics,Sparse matrices,survey,Text mining,text representation,Vocabulary,word embeddings,word vectors}
+    \endentry
     \entry{shalagin2024survey}{article}{}{}
       \name{author}{1}{}{%
         {{hash=8f0f54224ea5c86cbf6aeecf8bb92111}{%
@@ -35,8 +178,8 @@
       \strng{authornamehash}{8f0f54224ea5c86cbf6aeecf8bb92111}
       \strng{authorfullhash}{8f0f54224ea5c86cbf6aeecf8bb92111}
       \strng{authorfullhashraw}{8f0f54224ea5c86cbf6aeecf8bb92111}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{International Journal of Open Information Technologies}
@@ -46,6 +189,114 @@
       \field{year}{2024}
       \field{pages}{11\bibrangedash 21}
       \range{pages}{11}
+    \endentry
+    \entry{ulrichUnderstandingNatureMetadata2022}{article}{}{}
+      \name{author}{12}{}{%
+        {{hash=c68f2fb24577111328c9a041b7d8dc87}{%
+           family={Ulrich},
+           familyi={U\bibinitperiod},
+           given={Hannes},
+           giveni={H\bibinitperiod}}}%
+        {{hash=f971b9440b805f4395ea5df9a4771a98}{%
+           family={Kock-Schoppenhauer},
+           familyi={K\bibinithyphendelim S\bibinitperiod},
+           given={Ann-Kristin},
+           giveni={A\bibinithyphendelim K\bibinitperiod}}}%
+        {{hash=d2c0e8bceab383b89179b4b175cca7e4}{%
+           family={Deppenwiese},
+           familyi={D\bibinitperiod},
+           given={Noemi},
+           giveni={N\bibinitperiod}}}%
+        {{hash=f5e2064143113ce14aa34a893cead801}{%
+           family={Gött},
+           familyi={G\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+        {{hash=27067080ec10665070673b3e62f5ffd0}{%
+           family={Kern},
+           familyi={K\bibinitperiod},
+           given={Jori},
+           giveni={J\bibinitperiod}}}%
+        {{hash=8dc8a33d478b9af7b15fe47f211d7a1d}{%
+           family={Lablans},
+           familyi={L\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=106101f8ef41bfc67a5996b9e8d85925}{%
+           family={Majeed},
+           familyi={M\bibinitperiod},
+           given={Raphael\bibnamedelima W.},
+           giveni={R\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=43cbde8b17ef8ebad6b5e99c6b6f18db}{%
+           family={Stöhr},
+           familyi={S\bibinitperiod},
+           given={Mark\bibnamedelima R.},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=a1e36d750d3e1d674bc831a81ce23ede}{%
+           family={Stausberg},
+           familyi={S\bibinitperiod},
+           given={Jürgen},
+           giveni={J\bibinitperiod}}}%
+        {{hash=33db7653b82296df81d79b96b5f71804}{%
+           family={Varghese},
+           familyi={V\bibinitperiod},
+           given={Julian},
+           giveni={J\bibinitperiod}}}%
+        {{hash=7a351985ff2f38fa4ca27faa597a7349}{%
+           family={Dugas},
+           familyi={D\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=628882252ad175e9ff14e1c67fee2574}{%
+           family={Ingenerf},
+           familyi={I\bibinitperiod},
+           given={Josef},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {JMIR Publications Inc., Toronto, Canada}%
+      }
+      \strng{namehash}{902e2088a4d2f2e479071216f8ecbd7c}
+      \strng{fullhash}{4066a52f64db9349f99378a0db978d4b}
+      \strng{fullhashraw}{4066a52f64db9349f99378a0db978d4b}
+      \strng{bibnamehash}{902e2088a4d2f2e479071216f8ecbd7c}
+      \strng{authorbibnamehash}{902e2088a4d2f2e479071216f8ecbd7c}
+      \strng{authornamehash}{902e2088a4d2f2e479071216f8ecbd7c}
+      \strng{authorfullhash}{4066a52f64db9349f99378a0db978d4b}
+      \strng{authorfullhashraw}{4066a52f64db9349f99378a0db978d4b}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Background: Metadata are created to describe the corresponding data in a detailed and unambiguous way and is used for various applications in different research areas, for example, data identification and classification. However, a clear definition of metadata is crucial for further use. Unfortunately, extensive experience with the processing and management of metadata has shown that the term “metadata” and its use is not always unambiguous. Objective: This study aimed to understand the definition of metadata and the challenges resulting from metadata reuse. Methods: A systematic literature search was performed in this study following the PRISMA (Preferred Reporting Items for Systematic Reviews and Meta-Analyses) guidelines for reporting on systematic reviews. Five research questions were identified to streamline the review process, addressing metadata characteristics, metadata standards, use cases, and problems encountered. This review was preceded by a harmonization process to achieve a general understanding of the terms used. Results: The harmonization process resulted in a clear set of definitions for metadata processing focusing on data integration. The following literature review was conducted by 10 reviewers with different backgrounds and using the harmonized definitions. This study included 81 peer-reviewed papers from the last decade after applying various filtering steps to identify the most relevant papers. The 5 research questions could be answered, resulting in a broad overview of the standards, use cases, problems, and corresponding solutions for the application of metadata in different research areas. Conclusions: Metadata can be a powerful tool for identifying, describing, and processing information, but its meaningful creation is costly and challenging. This review process uncovered many standards, use cases, problems, and solutions for dealing with metadata. The presented harmonized definitions and the new schema have the potential to improve the classification and generation of metadata by creating a shared understanding of metadata and its context.}
+      \field{day}{11}
+      \field{journaltitle}{Journal of Medical Internet Research}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{number}{1}
+      \field{shorttitle}{Understanding the {{Nature}} of {{Metadata}}}
+      \field{title}{Understanding the {{Nature}} of {{Metadata}}: {{Systematic Review}}}
+      \field{urlday}{4}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{24}
+      \field{year}{2022}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{e25440}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.2196/25440
+      \endverb
+      \verb{file}
+      \verb /Users/ingaschoyen/Library/Mobile Documents/com~apple~CloudDocs/Zotero/storage/Q6R4DN4Y/Ulrich et al. - 2022 - Understanding the Nature of Metadata Systematic Review.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.jmir.org/2022/1/e25440
+      \endverb
+      \verb{url}
+      \verb https://www.jmir.org/2022/1/e25440
+      \endverb
     \endentry
   \enddatalist
 \endrefsection

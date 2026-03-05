@@ -7,15 +7,47 @@ The documentation is stored across multiple archives on an internal network driv
 There is no effective or universal search functionality available.
 As a result, for each individual asset, specialists must search multiple archives using different search terms, without certainty about which archive contains the required information, or whether the information exists at all. 
 This makes the retrieval of documentation a time-consuming and inefficient “treasure hunt.”  
+Recent advances in natural language processing (NLP) and information retrieval (IR) techniques offer promising advantages for improving the search and retrieval of documents in such complex archival systems.
+Additionally, techniques for extracting and structuring information from unstructured data, such as optical character recognition (OCR) for scanned historical documents, can help in making the content of these archives more accessible and searchable.
+
+Here, we outline the plan for a project that strives to combine these techniques to implement a proof of concept for a ML-aided document retrieval system, to support the asset specialists from the province of Gelderland in their work.
+
 
 \subsection{Background of the Project}
 
+To begin with, we briefly review the established techniques in the fields of NLP, IR, and OCR which are possible candidates for our project, as well as the current state-of-the-art implementations of these.
 
+OCR techniques have been established for decades and have seen significant improvements in accuracy and efficiency throughout these.
+By now, a large variety of open-source OCR tools are available \cite{nazeemOpenSourceOCRLibraries2024}
+
+NLP encompasses a wide range of techniques for processing and understanding human language, that allow to turn unstructured text into structured data that can be more easily processed and retrieved.
+While LLMs currently represent the state-of-the-art in NLP, they are not the only option for improving document retrieval, and they may not be the most suitable for our use case, due to their high computational requirements and potential privacy concerns.
+Other techniques, such as BM25 and TF-IDF, can be used to improve keyword-based search, while embedding-based approaches can be used to enable semantic search capabilities \cite{patilSurveyTextRepresentation2023}.
+Of particular interest to our use case, \textcite{patilSurveyTextRepresentation2023} outlines how domain-specific and knowledge-enriched embeddings are particularly useful in capturing semantic and syntactical relationships, by using local contextual information and external knowledge sources, such as Wikipedia.
+
+Search and retrieval systems have also seen significant advancements, with the development of more sophisticated indexing and ranking algorithms, as well as the integration of NLP techniques to enhance search capabilities.
 \cite{shalagin2024survey}
+
+Lastly, while metadata has become a standard tool for enriching digital objects with structured information, there is a lack of standardization in the field, which hinders interoperability and requires case-by-case solutions for metadata extraction and structuring \cite{ulrichUnderstandingNatureMetadata2022}.
+While this thus suggests that we need to develop a custom solution for our use case, we take inspiration from domain-relevant implementations, such as the work of ...
 
 \subsection{Aim of the Project}
 
-The objective of this project is to design a working model that can enhance the retrieval of engineering documents concerning civil infrastructure assets, such as bridges, viaducts and culverts. At the moment, asset specialists are forced to conduct a manual search in a number of different and inconsistent archival directories that use varying naming conventions, classifications, and terminologies. This has resulted in a situation where the retrieval of specific construction drawings and technical documents is a slow task. This project has been created to address this situation and provide a solution that can make document discovery a quicker and more assured process. The project will involve designing a model as a proof of concept that will help in searching documents in a better and more efficient manner. The project will make use of artificial intelligence technologies that can process and retrieve documents, making the task simpler and quicker for specialists. The main objective is to design a solution that is simple and easy to use for the end users, who already possess the required expertise and knowledge in the domain. Furthermore, our team will try to ensure that the proposed solution is sustainable, privacy-preserving and cost-effective. Therefore the system will utilize open-source tools, which will ensure the privacy of the information contained within the archives. In conclusion, the project aims to provide an intelligent yet lightweight retrieval system8 that can significantly improve the efficiency of searching engineering archives, therefore supporting better maintenance planning, structural analysis and safety assessments for civil engineering assets. By reducing the time required to find critical documentation and minimizing the risk of missing important records, the system promises to improve the work of asset specialists and improve decision-making processes. This improvement can lead to more reliable infrastructure management, faster project preparation and reduced operational delays.
+
+The objective of this project is to design a working model that can enhance the retrieval of engineering documents concerning civil infrastructure assets, such as bridges, viaducts and culverts. 
+At the moment, asset specialists are forced to conduct a manual search in a number of different and inconsistent archival directories that use varying naming conventions, classifications, and terminologies. 
+This has resulted in a situation where the retrieval of specific construction drawings and technical documents is a slow task. 
+
+This project has been created to address this situation and provide a solution that can make document discovery a quicker and more assured process. 
+The project will involve designing a model as a proof of concept that will help in searching documents in a better and more efficient manner. 
+The project will make use of artificial intelligence technologies that can process and retrieve documents, making the task simpler and quicker for specialists. 
+The main objective is to design a solution that is simple and easy to use for the end users, who already possess the required expertise and knowledge in the domain. 
+Furthermore, our team will try to ensure that the proposed solution is sustainable, privacy-preserving and cost-effective. 
+Therefore the system will utilize open-source tools, which will ensure the privacy of the information contained within the archives. 
+
+In conclusion, the project aims to provide an intelligent yet lightweight retrieval system that can significantly improve the efficiency of searching engineering archives, therefore supporting better maintenance planning, structural analysis and safety assessments for civil engineering assets. 
+By reducing the time required to find critical documentation and minimizing the risk of missing important records, the system promises to improve the work of asset specialists and improve decision-making processes. 
+This improvement can lead to more reliable infrastructure management, faster project preparation and reduced operational delays.
 
 \section{Project Plan}
 
