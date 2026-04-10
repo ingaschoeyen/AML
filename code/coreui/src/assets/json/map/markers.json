@@ -1,0 +1,69 @@
+{
+    "markers": [
+        {
+            "id": "marker-001",
+            "name": "Central Office",
+            "latitude": 52.3676,
+            "longitude": 4.9041,
+            "category": "office",
+            "status": "active",
+            "metadata": {
+                "address": "Damrak 1, Amsterdam",
+                "description": "Main company office location",
+                "lastUpdated": "2026-04-02T00:00:00Z"
+            }
+        },
+        {
+            "id": "marker-002",
+            "name": "North Warehouse",
+            "latitude": 52.4302,
+            "longitude": 4.9451,
+            "category": "warehouse",
+            "status": "active",
+            "metadata": {
+                "address": "Warehouse District 12, Amsterdam",
+                "description": "Storage and distribution hub",
+                "lastUpdated": "2026-04-02T00:00:00Z"
+            }
+        },
+        {
+            "id": "marker-003",
+            "name": "Customer Site A",
+            "latitude": 52.0907,
+            "longitude": 5.1214,
+            "category": "customer",
+            "status": "pending",
+            "metadata": {
+                "address": "Stationplein 5, Utrecht",
+                "description": "Scheduled service visit",
+                "lastUpdated": "2026-04-02T00:00:00Z"
+            }
+        },
+        {
+            "id": "marker-004",
+            "name": "Service Point West",
+            "latitude": 51.9244,
+            "longitude": 4.4777,
+            "category": "service",
+            "status": "inactive",
+            "metadata": {
+                "address": "Westblaak 20, Rotterdam",
+                "description": "Temporary closed service point",
+                "lastUpdated": "2026-04-02T00:00:00Z"
+            }
+        },
+        {
+            "id": "marker-005",
+            "name": "Retail Store South",
+            "latitude": 51.4416,
+            "longitude": 5.4697,
+            "category": "retail",
+            "status": "active",
+            "metadata": {
+                "address": "Markt 8, Eindhoven",
+                "description": "Retail location with public access",
+                "lastUpdated": "2026-04-02T00:00:00Z"
+            }
+        }
+    ]
+}
