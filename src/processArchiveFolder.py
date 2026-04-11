@@ -41,9 +41,9 @@ input_folder = sys.argv[1]
 try:
     inputController = inputFolderController(input_folder)
 
-    print(inputController.foldersAreValidPaths())
-
     inputController.copyInputIntoOutputFolder()
+
+    inputController.createAllBasicFileObjects()
 
 except Exception as e:
     print(str(e))

@@ -3,6 +3,7 @@ import shutil
 from pathlib import Path
 
 from configs.filePaths import INPUT_DATA_FOLDER, OUTPUT_DATA_FOLDER
+from classes.singleArchiveFile import singleArchiveFile
 
 class inputFolderController(object):
     input_folder_path = None
@@ -56,3 +57,12 @@ class inputFolderController(object):
                     
                     target_path.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(input_entry, target_path)
+
+    def createAllBasicFileObjects(self) -> list:
+        inputs_path = os.path.join(self.getOutputFolderPath(), "inputs")
+        if not os.path.exists(inputs_path):
+            raise Exception(f"The 'inputs' folder does not exist within the folder {self.getOutputFolderPath()}")
+         
+        for archive_file in Path(inputs_path).rglob('*'):
+            archive_file_object = singleArchiveFile(inputs_path, archive_file.relative_to(inputs_path))
+            print(archive_file_object.getFileType())
