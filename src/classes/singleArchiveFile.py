@@ -1,5 +1,8 @@
 from typing import Self, Optional
 from pathlib import Path
+import os
+import json
+from configs.statusses import processingStatus
 
 class singleArchiveFile(object):
     '''
@@ -19,10 +22,12 @@ class singleArchiveFile(object):
     collection = None
     fileName = None
     fileType = None
+    status = None
 
-    def __init__(self, path_to_inputs_folder:str, relative_path_in_input_folder:str) -> None:
-        self.path_to_inputs_folder = path_to_inputs_folder
-        self._splitPathIntoIdentifiers(relative_path_in_input_folder)
+    def __init__(self, output_folder_path:str, relative_path_in_inputs_folder:str) -> None:
+        self.output_folder_path = output_folder_path
+        self._setStatus(processingStatus.NEW)
+        self._splitPathIntoIdentifiers(relative_path_in_inputs_folder)
 
     @classmethod    
     def initFromStoredObject(self, storedObjectPath:str) -> Self:
@@ -30,7 +35,16 @@ class singleArchiveFile(object):
         Take the stored extracted text, images, ect to construct this class,
         instead of having it processed from input files over again 
         '''
-        pass
+        with open(storedObjectPath, "r", encoding="UTF-8") as of:
+            file_object_json = json.load(of)
+
+            self._setEntrySubfolder(file_object_json["entrySubFolder"])
+            self._setCollection(file_object_json["collection"])
+            self._setFileName(file_object_json["fileName"])
+            self._setFileType(file_object_json["fileType"])
+            self._setStatus(file_object_json["status"])
+
+        return self
 
     def _setEntrySubfolder(self, entry_subfolder:str) -> None:
         self.entrySubfolder = entry_subfolder
@@ -42,7 +56,13 @@ class singleArchiveFile(object):
         self.fileName = file_name
 
     def _setFileType(self, file_type:str) -> None:
-        self.fileType = file_type
+        '''
+        Returns the filetype in lowercase
+        '''
+        self.fileType = file_type.lower()
+
+    def _setStatus(self, status:processingStatus) -> None:
+        self.status = status
 
     def _splitPathIntoIdentifiers(self, relative_path_in_input_folder:str) -> None:
         path_parts = Path(relative_path_in_input_folder).parts
@@ -67,9 +87,36 @@ class singleArchiveFile(object):
     
     def getFileType(self) -> Optional[str]:
         return self.fileType
+    
+    def getStatus(self) -> processingStatus:
+        return self.status
+    
+    def getFullFilePath(self) -> str:
+        file_path = os.path.join(self.output_folder_path, "inputs",
+                                   self.getEntrySubFolder() or '', 
+                                   self.getCollection() or '', 
+                                   self.getFileName() + self.getFileType())
+        
+        return file_path
 
     def saveAsObjectFile(self) -> None:
         '''
         Functionality to dump stored text ect. to a JSON file or something similar
         '''
-        pass
+        output_path = os.path.join(self.output_folder_path, "output", 
+                                   self.getEntrySubFolder() or '', 
+                                   self.getCollection() or '', 
+                                   self.getFileName())
+        
+        os.makedirs(output_path, exist_ok=True)
+
+        with open(os.path.join(output_path, "fileObject.json"), "w", encoding="UTF-8") as of:
+            object_as_json = {
+                "entrySubfolder": self.getEntrySubFolder(),
+                "collection": self.getCollection(),
+                "fileName": self.getFileName(),
+                "fileType": self.getFileType(),
+                "status": self.getStatus()
+            }
+
+            json.dump(object_as_json, of, indent=2)

@@ -8,6 +8,7 @@ from classes.singleArchiveFile import singleArchiveFile
 class inputFolderController(object):
     input_folder_path = None
     output_folder_path = None
+    file_objects = {}
 
     def __init__(self, folder_path:str) -> None:
         self._setInputFolderPath(folder_path)
@@ -35,6 +36,16 @@ class inputFolderController(object):
     def getOutputFolderPath(self) -> str:
         return self.output_folder_path
     
+    def getInputsPath(self) -> str:
+        inputs_path = os.path.join(self.getOutputFolderPath(), "inputs")
+        if not os.path.exists(inputs_path):
+            raise Exception(f"The 'inputs' folder does not exist within the folder {self.getOutputFolderPath()}")
+        
+        return inputs_path
+    
+    def getFileObjects(self) -> dict[str,singleArchiveFile]:
+        return self.file_objects
+    
     def foldersAreValidPaths(self) -> bool:
         return os.path.exists(self.input_folder_path) and os.path.exists(self.output_folder_path)
     
@@ -58,11 +69,23 @@ class inputFolderController(object):
                     target_path.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(input_entry, target_path)
 
+    def createStatusFiles(self) -> None:
+        status_folder_path = os.path.join(self.getOutputFolderPath(), "status")
+
+        if not os.path.exists(status_folder_path):
+            os.makedirs(status_folder_path)
+            os.makedirs(os.path.join(status_folder_path, "status_per_doc"))      
+
     def createAllBasicFileObjects(self) -> list:
-        inputs_path = os.path.join(self.getOutputFolderPath(), "inputs")
-        if not os.path.exists(inputs_path):
-            raise Exception(f"The 'inputs' folder does not exist within the folder {self.getOutputFolderPath()}")
-         
-        for archive_file in Path(inputs_path).rglob('*'):
-            archive_file_object = singleArchiveFile(inputs_path, archive_file.relative_to(inputs_path))
-            print(archive_file_object.getFileType())
+        '''
+        Create the new singleArchiveFile objects, put them in the controllers file_objects set and save the object 
+        '''
+        for archive_file in Path(self.getInputsPath()).rglob('*'):
+            if Path.is_file(archive_file):
+                archive_file_object = singleArchiveFile(self.getOutputFolderPath(), archive_file.relative_to(self.getInputsPath()))
+                
+                name_parts = [archive_file_object.getEntrySubFolder(), archive_file_object.getCollection(), archive_file_object.getFileName()]
+                file_object_name = "_".join([part for part in name_parts if part is not None])
+                self.file_objects[file_object_name] = archive_file_object
+                
+                archive_file_object.saveAsObjectFile()

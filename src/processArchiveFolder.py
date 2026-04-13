@@ -1,7 +1,8 @@
-import os
+import traceback
 import sys
 
 from controllers.inputFolderController import inputFolderController
+from controllers.textExtractionController import textExtractionController
 
 '''
 The script to recieve the path of a folder from which the documents are to be processed.
@@ -45,6 +46,16 @@ try:
 
     inputController.createAllBasicFileObjects()
 
+    for file_identifier, file_object in inputController.getFileObjects().items():
+        if "FOTO" in file_identifier:
+            continue
+
+        this_file_controller = textExtractionController(file_object)
+
+        print(f"{file_identifier}: ")
+        print(this_file_controller.extractUnformattedText())
+        print("="*100)
+
 except Exception as e:
-    print(str(e))
+    print(traceback.format_exc(e))
     sys.exit(1)
