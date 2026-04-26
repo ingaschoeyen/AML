@@ -88,4 +88,4 @@ class inputFolderController(object):
                 file_object_name = "_".join([part for part in name_parts if part is not None])
                 self.file_objects[file_object_name] = archive_file_object
                 
-                archive_file_object.saveAsObjectFile()
+                archive_file_object.saveAsObjectFile(False)

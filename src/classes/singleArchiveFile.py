@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 import json
 from configs.statusses import processingStatus
+from configs.fileNames import SAVED_TEXT_FILE_NAME, SAVED_METADATA_FILE_NAME
 
 class singleArchiveFile(object):
     '''
@@ -23,6 +24,7 @@ class singleArchiveFile(object):
     fileName = None
     fileType = None
     status = None
+    page_texts = None
 
     def __init__(self, output_folder_path:str, relative_path_in_inputs_folder:str) -> None:
         self.output_folder_path = output_folder_path
@@ -43,6 +45,7 @@ class singleArchiveFile(object):
             self._setFileName(file_object_json["fileName"])
             self._setFileType(file_object_json["fileType"])
             self._setStatus(file_object_json["status"])
+            self.setPageTexts(file_object_json["page_texts"])
 
         return self
 
@@ -74,7 +77,7 @@ class singleArchiveFile(object):
             self._setCollection("_".join(path_parts[1:-1]))
 
         self._setFileName(Path(path_parts[-1]).stem)
-        self._setFileType("".join(Path(path_parts[-1]).suffixes))
+        self._setFileType(Path(path_parts[-1]).suffixes[-1])
 
     def getEntrySubFolder(self) -> Optional[str]:
         return self.entrySubfolder
@@ -98,8 +101,14 @@ class singleArchiveFile(object):
                                    self.getFileName() + self.getFileType())
         
         return file_path
+    
+    def setPageTexts(self, page_text_dict:dict[int,str]) -> None:
+        self.page_texts = page_text_dict
 
-    def saveAsObjectFile(self) -> None:
+    def getPageTexts(self) -> Optional[dict[int:str]]:
+        return self.page_texts
+
+    def saveAsObjectFile(self, override_existing:bool = True) -> None:
         '''
         Functionality to dump stored text ect. to a JSON file or something similar
         '''
@@ -108,15 +117,53 @@ class singleArchiveFile(object):
                                    self.getCollection() or '', 
                                    self.getFileName())
         
-        os.makedirs(output_path, exist_ok=True)
+        if override_existing:
+            os.makedirs(output_path, exist_ok=True)
 
-        with open(os.path.join(output_path, "fileObject.json"), "w", encoding="UTF-8") as of:
-            object_as_json = {
-                "entrySubfolder": self.getEntrySubFolder(),
-                "collection": self.getCollection(),
-                "fileName": self.getFileName(),
-                "fileType": self.getFileType(),
-                "status": self.getStatus()
-            }
+            with open(os.path.join(output_path, "fileObject.json"), "w", encoding="UTF-8") as of:
+                object_as_json = {
+                    "entrySubfolder": self.getEntrySubFolder(),
+                    "collection": self.getCollection(),
+                    "fileName": self.getFileName(),
+                    "fileType": self.getFileType(),
+                    "status": self.getStatus(),
+                    "page_texts": self.getPageTexts()
+                }
 
-            json.dump(object_as_json, of, indent=2)
+                json.dump(object_as_json, of, indent=2)
+
+    def saveSearchableRepresentation(self) -> None:
+        '''
+        Functionality to save this file as something that will be fed to the retrieval algorithm
+
+        It will include the full text, extrected features, learned features
+
+        And save in a specific file format
+
+        TODO: do more than just saving the simple text as a .txt file and name as metaData dict, 
+        specifically, also save a vector representation of the text and a metadata/learned feature dict
+        '''
+
+        ouptut_path = os.path.join(self.output_folder_path, "output", 
+                                   self.getEntrySubFolder() or '', 
+                                   self.getCollection() or '', 
+                                   self.getFileName())
+
+        joined_text = "\n".join([page_text for page_text in self.getPageTexts().values()])
+        
+        with open(os.path.join(ouptut_path, SAVED_TEXT_FILE_NAME), "w", encoding="UTF-8") as tf:
+            tf.write(joined_text)
+
+        tf.close()
+
+        placeholder_metadata_dict = {
+            "dataset": "N338",
+            "dataset_entry": "338051",
+            "document_path_in_entry": "/".join([self.getEntrySubFolder(), self.getCollection()]),
+            "file_name": self.getFileName(),
+            "file_type": self.getFileType()
+        }
+        with open(os.path.join(ouptut_path, SAVED_METADATA_FILE_NAME), "w", encoding="UTF-8") as mf:
+            json.dump(placeholder_metadata_dict, mf, indent=2)
+
+        mf.close()

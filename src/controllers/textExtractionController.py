@@ -10,17 +10,29 @@ class textExtractionController(object):
     def __init__(self, archive_file:singleArchiveFile) -> None:
         self.archive_file = archive_file
 
-    def extractUnformattedText(self) -> str:
+    def extractUnformattedText(self) -> dict[int,str]:
         '''
         See what the filetype is and take the correct extraction steps
         '''
 
-        page_texts = []
+        page_texts = {}
         if self.archive_file.getFileType() == '.pdf':
             pdf_object = pdfplumber.open(self.archive_file.getFullFilePath()) 
             
-            for page in pdf_object.pages:
+            for i, page in enumerate(pdf_object.pages):
                 # TODO: determine if page is scan or not
-                page_texts.append(page.extract_text())
+                page_texts[i] = page.extract_text()
 
-        return "\n".join(page_texts)
+        return page_texts
+
+
+    def completeTextExtraction(self) -> dict[int,str]:
+        '''
+        Call all text extraction methods and make choices to build the final text representation.
+
+        returns a {page_i:page_text} dict
+
+        TODO: do something more than just a quick pdf text extraction 
+        '''
+
+        return self.extractUnformattedText()

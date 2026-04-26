@@ -52,9 +52,11 @@ try:
 
         this_file_controller = textExtractionController(file_object)
 
-        print(f"{file_identifier}: ")
-        print(this_file_controller.extractUnformattedText())
-        print("="*100)
+        # print(f"Extracting from: {file_identifier}")
+        file_object.setPageTexts(this_file_controller.extractUnformattedText())
+
+        file_object.saveAsObjectFile()
+        file_object.saveSearchableRepresentation()
 
 except Exception as e:
     print(traceback.format_exc(e))
