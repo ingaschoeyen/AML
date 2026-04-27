@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+
+# ignore heavy/generated data
+outputs/
+data/
+*.csv
+
+# but allow small test data if needed
+test data/
+
+# env
+.env
