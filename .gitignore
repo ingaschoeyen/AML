@@ -4,3 +4,16 @@ code/retrieval/index/
 code/retrieval/venv
 code/retrieval/PLAN.md
 code/retrieval/Rubric-AML.pdf
+__pycache__/
+*.pyc
+
+# ignore heavy/generated data
+outputs/
+data/
+*.csv
+
+# but allow small test data if needed
+test data/
+
+# env
+.env
