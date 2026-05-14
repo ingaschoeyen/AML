@@ -1,3 +1,9 @@
+code/retrieval/__pycache__
+code/retrieval/Files
+code/retrieval/index/
+code/retrieval/venv
+code/retrieval/PLAN.md
+code/retrieval/Rubric-AML.pdf
 __pycache__/
 *.pyc
 
