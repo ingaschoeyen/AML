@@ -51,12 +51,15 @@ function generateContentHTML(searchResults){
     }
     return contentHTML;
 
+}
+
 async function search(){
     let keywords = document.getElementByID('searchKeywords');
     let filters = document.getElementById('searchFilters');
     try {
         // returns idxs of archive items?
         let searchResults = await py`SearchEngine.search(${keywords, filters})`;
+        // alternative python call that looks into 
         let contentHTML = generateContentHTML(searchResults);
         contentField.innerHTML = contentHTML;
     } catch (e){
