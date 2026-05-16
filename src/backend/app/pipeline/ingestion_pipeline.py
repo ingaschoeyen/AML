@@ -5,6 +5,7 @@ from app.ingestion.file_classifier_service import FileClassifier
 from app.ingestion.inventory_tracking_service import InventoryTrackingService
 from app.storage.csv_repository import CSVRepository
 from app.processing.embedding_service import SemanticEmbedder
+from app.processing.index_builder_service import IndexBuilderService
 
 class IngestionPipeline:
     def __init__(
@@ -90,6 +91,13 @@ class IngestionPipeline:
             file_type="pkl",
         )
 
+        index_builder = IndexBuilderService()
+        index_result = index_builder.build_index(
+            extraction_csv_path=extraction_path,
+            embeddings_pkl_path=self.output_dir / "embeddings.pkl",
+            index_dir=self.output_dir / "index",
+        )
+
         return {
             "status": "completed",
             "message": "Extraction completed.",
@@ -104,4 +112,7 @@ class IngestionPipeline:
             "unchanged_files": len(changes["unchanged_files"]),
             "embeddings_path": str(embeddings_path),
             "embeddings_created": len(embeddings_df),
+            "index_dir": index_result["index_dir"],
+            "documents_indexed": index_result["documents_indexed"],
+            "vectors_indexed": index_result["vectors_indexed"],
         }

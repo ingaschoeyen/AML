@@ -5,15 +5,12 @@ Load persisted indexes and run BM25, semantic, or hybrid search.
 import json
 import sys
 from pathlib import Path
-
 import bm25s
 import numpy as np
 
-import config
-from backend.app.processing.text_preprocessing_service import process_text
-
-
-from coordinates import rd_distance
+from app.search import config
+from app.processing.text_preprocessing_service import process_text
+from app.search.coordinates import rd_distance
 
 
 def _matches_coord_filter(
@@ -83,11 +80,23 @@ class Searcher:
             self._doc_store: list[dict] = json.load(f)
 
         # BM25 index + tokenized corpus
-        corpus_path = index_dir / "bm25_index" / "corpus_tokens.json"
-        with open(corpus_path, encoding="utf-8") as f:
-            self._corpus_tokens: list[list[str]] = json.load(f)
+        # corpus_path = index_dir / "bm25_index" / "corpus_tokens.json"
+        # with open(corpus_path, encoding="utf-8") as f:
+        #     self._corpus_tokens: list[list[str]] = json.load(f)
 
-        self._bm25 = bm25s.BM25.load(str(index_dir / "bm25_index"), load_corpus=False)
+        # self._bm25 = bm25s.BM25.load(str(index_dir / "bm25_index"), load_corpus=False)
+
+        self._bm25 = None
+        self._corpus_tokens = None
+
+        bm25_dir = index_dir / "bm25_index"
+        corpus_path = bm25_dir / "corpus_tokens.json"
+
+        if bm25_dir.exists() and corpus_path.exists():
+            with open(corpus_path, encoding="utf-8") as f:
+                self._corpus_tokens = json.load(f)
+
+            self._bm25 = bm25s.BM25.load(str(bm25_dir), load_corpus=False)
 
         # Raw texts for snippet extraction
         texts_path = index_dir / "texts.json"
@@ -180,6 +189,9 @@ class Searcher:
         place_y: int | None = None,
         place_radius: float = 2000.0,
     ) -> list[dict]:
+        if self._bm25 is None or self._corpus_tokens is None:
+            raise ValueError("BM25 index is not available. Build BM25 index first or use mode='semantic'.")
+
         tokens = process_text(query, config.NER_MODEL, config.NER_BOOST_TYPES, config.NER_BOOST_FACTOR)
         if not tokens:
             return []
@@ -218,6 +230,11 @@ class Searcher:
             [query], batch_size=1, normalize_embeddings=True, convert_to_numpy=True
         )[0].astype(np.float32)
 
+        if embeddings.shape[1] != query_vec.shape[0]:
+            raise ValueError(
+                f"Dimension mismatch: docs={embeddings.shape[1]}, query={query_vec.shape[0]}"
+            )
+
         sims = _cosine_similarity(query_vec, embeddings)
         top_indices = np.argsort(sims)[::-1][: min(top_k, len(self._doc_store))]
 
@@ -247,6 +264,10 @@ class Searcher:
         place_y: int | None = None,
         place_radius: float = 2000.0,
     ) -> list[dict]:
+        
+        if self._bm25 is None:
+            raise ValueError("Hybrid search requires BM25 index. Use mode='semantic' for now.")
+
         # Retrieve a broader candidate pool before fusion
         pool = min(top_k * 5, len(self._doc_store))
 
