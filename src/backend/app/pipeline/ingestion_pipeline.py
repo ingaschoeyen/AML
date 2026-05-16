@@ -4,6 +4,7 @@ from app.ingestion.content_extraction_service import ContentExtractor
 from app.ingestion.file_classifier_service import FileClassifier
 from app.ingestion.inventory_tracking_service import InventoryTrackingService
 from app.storage.csv_repository import CSVRepository
+from app.processing.embedding_service import SemanticEmbedder
 
 class IngestionPipeline:
     def __init__(
@@ -23,6 +24,7 @@ class IngestionPipeline:
     def run(self) -> dict:
         inventory_path = self.output_dir / "inventory.csv"
         extraction_path = self.output_dir / "page_extraction.csv"
+        embeddings_path = self.output_dir / "embeddings.pkl"
 
         classifier = FileClassifier(self.root_folder)
         inventory_df = classifier.discover_files()
@@ -74,6 +76,20 @@ class IngestionPipeline:
         extraction_df = extractor.process_inventory(files_to_process)
         self.csv_repository.save_extraction(extraction_df, extraction_path)
 
+        embedder = SemanticEmbedder(
+            model_name="clips/e5-small-trm-nl",
+            recursive=True,
+            merge_type="mean",
+            chunk_size=1000,
+            chunk_overlap=200,
+        )
+
+        embeddings_df = embedder.run_from_csv(
+            path_to_text=extraction_path,
+            output_dir=self.output_dir,
+            file_type="pkl",
+        )
+
         return {
             "status": "completed",
             "message": "Extraction completed.",
@@ -86,4 +102,6 @@ class IngestionPipeline:
             "modified_files": len(changes["modified_files"]),
             "deleted_files": len(changes["deleted_files"]),
             "unchanged_files": len(changes["unchanged_files"]),
+            "embeddings_path": str(embeddings_path),
+            "embeddings_created": len(embeddings_df),
         }

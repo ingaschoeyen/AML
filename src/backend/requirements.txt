@@ -1,0 +1,12 @@
+bm25s
+FlagEmbedding
+numpy
+pandas
+nltk
+uvicorn
+FastAPI
+pymupdf
+pytesseract
+python-docx
+langchain-text-splitters
+sentence-transformers

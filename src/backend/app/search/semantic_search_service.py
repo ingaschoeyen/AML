@@ -10,7 +10,7 @@ import bm25s
 import numpy as np
 
 import config
-from preprocessing import process_text
+from backend.app.processing.text_preprocessing_service import process_text
 
 
 from coordinates import rd_distance

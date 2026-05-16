@@ -17,3 +17,8 @@ test data/
 
 # env
 .env
+.venv/
+venv/
+env/
+
+*.pkl

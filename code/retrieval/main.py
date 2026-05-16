@@ -21,10 +21,10 @@ import json
 import sys
 from pathlib import Path
 
-import config
-from coordinates import geocode_place
-from preprocessing import download_nltk_data
-from searcher import Searcher
+import backend.app.config as config
+from backend.app.storage.coordinates import geocode_place
+from backend.app.processing.text_preprocessing_service import download_nltk_data
+from backend.app.search.searcher import Searcher
 
 
 def parse_args() -> argparse.Namespace:

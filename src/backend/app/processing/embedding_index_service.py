@@ -20,7 +20,7 @@ import pypdf
  
 import config
 from coordinates import extract_coordinates
-from preprocessing import download_nltk_data, process_text
+from backend.app.processing.text_preprocessing_service import download_nltk_data, process_text
  
  
 # ---------------------------------------------------------------------------
