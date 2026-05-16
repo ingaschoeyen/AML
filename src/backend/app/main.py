@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from app.models.schemas import IngestionRequest, IngestionResponse
 from app.pipeline.ingestion_pipeline import IngestionPipeline
+from app.api.embedding_controller import router as embedding_router
 
 # to run: cd src/backend and then uvicorn app.main:app --reload
 
 app = FastAPI(title="Document Semantic Search API")
-
+app.include_router(embedding_router)
 
 @app.get("/")
 def health_check():
