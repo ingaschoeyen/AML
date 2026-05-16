@@ -10,3 +10,4 @@ pytesseract
 python-docx
 langchain-text-splitters
 sentence-transformers
+spacy

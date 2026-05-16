@@ -16,7 +16,7 @@ class VisualEmbedder:
 class SemanticEmbedder:
     def __init__(
         self,
-        model_name: str = "clips/e5-small-trm-nl",
+        model_name: str = "BAAI/bge-m3",
         recursive: bool = True,
         merge_type: str = "mean",
         chunk_size: int = 1000,
@@ -204,7 +204,7 @@ class SemanticEmbedder:
 
 if __name__ == "__main__":
     embedder = SemanticEmbedder(
-        model_name="clips/e5-small-trm-nl",
+        model_name="BAAI/bge-m3",
         recursive=True,
         merge_type="mean",
         chunk_size=1000,
