@@ -5,6 +5,7 @@ import pandas as pd
 from sentence_transformers import SentenceTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+import tqdm
 
 class VisualEmbedder:
     def __init__(self, params: dict | None = None):
@@ -74,6 +75,8 @@ class SemanticEmbedder:
             .reset_index(drop=True)
         )
 
+        print(f"Number of files with text to embed: {len(grouped)}")
+
         self.text_df = grouped
         return grouped
 
@@ -128,8 +131,8 @@ class SemanticEmbedder:
 
     def create_embeddings_from_dataframe(self, text_df: pd.DataFrame) -> pd.DataFrame:
         rows = []
-
-        for _, row in text_df.iterrows():
+        tqdm_files = tqdm.tqdm(text_df.iterrows(), total=len(text_df), desc="Creating embeddings")
+        for _, row in tqdm_files:
             file_id = row["file_id"]
             file_name = row["file_name"]
             pages = row["text_sep"]
@@ -154,7 +157,7 @@ class SemanticEmbedder:
                     "merge_type": self.merge_type,
                 }
             )
-
+            tqdm_files.set_postfix({"last_file": file_name})
         self.embeddings_df = pd.DataFrame(rows)
         return self.embeddings_df
 

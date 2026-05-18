@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.models.schemas import IngestionRequest, IngestionResponse
 from app.pipeline.ingestion_pipeline import IngestionPipeline
 from app.api.embedding_controller import router as embedding_router
@@ -7,6 +8,15 @@ from app.api.search_controller import router as search_router
 from app.api.index_controller import router as index_router
 
 app = FastAPI(title="Document Semantic Search API")
+
+# Enable CORS so browser clients can call the API from other origins.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # change to specific origins in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(embedding_router)
 app.include_router(search_router)
 app.include_router(index_router)

@@ -36,6 +36,12 @@ EMBED_FIELDS: list[str] = [
 BGE_MODEL_NAME: str = "BAAI/bge-m3"
 BGE_BATCH_SIZE: int = 32
 
+
+# ---------------------------------------------------------------------------
+# E5-NL 
+# ---------------------------------------------------------------------------
+E5_MODEL_NAME: str = "clips/e5-large-trm-nl"
+
 # ---------------------------------------------------------------------------
 # NER-based BM25 term boosting
 # spaCy Dutch model detects named entities; tokens belonging to the listed

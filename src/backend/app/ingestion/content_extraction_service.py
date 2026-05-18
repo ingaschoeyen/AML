@@ -7,7 +7,7 @@ from PIL import Image
 from docx import Document
 from tqdm import tqdm
 
-pytesseract.pytesseract.tesseract_cmd = #path to tesseract
+pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/Cellar/tesseract/5.5.2/bin/tesseract"
 
 class ContentExtractor:
     def __init__(
