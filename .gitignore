@@ -24,3 +24,6 @@ env/
 *.pkl
 *.npy
 *.json
+
+processed_documents/
+images/
