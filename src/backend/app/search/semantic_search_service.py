@@ -29,7 +29,7 @@ def _matches_coord_filter(
         refs = coords.get("road_refs", [])
         if not any(
             ref["road"].upper() == road.upper()
-            and (hm is None or abs(ref["hm"] - hm) <= hm_radius)
+            and (hm is None or ref["hm"] is None or abs(ref["hm"] - hm) <= hm_radius)
             for ref in refs
         ):
             return False
@@ -222,7 +222,17 @@ class Searcher:
     # Semantic search
     # ------------------------------------------------------------------
 
-    def search_semantic(self, query: str, top_k: int = config.DEFAULT_TOP_K) -> list[dict]:
+    def search_semantic(
+        self,
+        query: str,
+        top_k: int = config.DEFAULT_TOP_K,
+        road: str | None = None,
+        hm: float | None = None,
+        hm_radius: float = 1.0,
+        place_x: int | None = None,
+        place_y: int | None = None,
+        place_radius: float = 2000.0,
+    ) -> list[dict]:
         model = self._load_bge_model()
         embeddings = self._load_embeddings()
 
@@ -236,18 +246,23 @@ class Searcher:
             )
 
         sims = _cosine_similarity(query_vec, embeddings)
-        top_indices = np.argsort(sims)[::-1][: min(top_k, len(self._doc_store))]
+        ranked_indices = np.argsort(sims)[::-1]
 
         query_terms = process_text(query, config.NER_MODEL, config.NER_BOOST_TYPES, config.NER_BOOST_FACTOR)
-        return [
-            {
-                **self._doc_store[int(idx)],
-                "rank":  rank + 1,
+        output = []
+        for idx in ranked_indices:
+            doc_id = int(idx)
+            if not _matches_coord_filter(self._doc_store[doc_id], road, hm, hm_radius, place_x, place_y, place_radius):
+                continue
+            output.append({
+                **self._doc_store[doc_id],
+                "rank": len(output) + 1,
                 "score": round(float(sims[idx]), 6),
-                "snippets": self._extract_snippets(int(idx), query_terms),
-            }
-            for rank, idx in enumerate(top_indices)
-        ]
+                "snippets": self._extract_snippets(doc_id, query_terms),
+            })
+            if len(output) >= top_k:
+                break
+        return output
 
     # ------------------------------------------------------------------
     # Hybrid search (BM25 + semantic, fused via RRF)
@@ -271,8 +286,8 @@ class Searcher:
         # Retrieve a broader candidate pool before fusion
         pool = min(top_k * 5, len(self._doc_store))
 
-        bm25_results   = self.search_bm25(query,    top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius)
-        sem_results    = self.search_semantic(query, top_k=pool)
+        bm25_results = self.search_bm25(query,    top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius)
+        sem_results  = self.search_semantic(query, top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius)
 
         bm25_ids = [r["id"] for r in bm25_results]
         sem_ids  = [r["id"] for r in sem_results]
@@ -286,8 +301,6 @@ class Searcher:
         query_terms = process_text(query, config.NER_MODEL, config.NER_BOOST_TYPES, config.NER_BOOST_FACTOR)
         output = []
         for doc_id in fused_ids:
-            if not _matches_coord_filter(self._doc_store[doc_id], road, hm, hm_radius, place_x, place_y, place_radius):
-                continue
             entry = dict(self._doc_store[doc_id])
             entry["rank"]        = len(output) + 1
             entry["score_bm25"]  = round(bm25_score.get(doc_id, 0.0), 6)

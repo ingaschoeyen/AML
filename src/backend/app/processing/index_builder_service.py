@@ -4,6 +4,8 @@ import json
 import numpy as np
 import pandas as pd
 
+from app.search.coordinates import extract_coordinates
+
 
 class IndexBuilderService:
     def build_index(
@@ -58,6 +60,7 @@ class IndexBuilderService:
                     "page_count": int(file_rows["page_number"].nunique())
                     if "page_number" in file_rows.columns
                     else None,
+                    "coordinates": extract_coordinates(full_text),
                 }
             )
 
