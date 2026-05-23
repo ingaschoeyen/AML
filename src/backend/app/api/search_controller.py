@@ -23,6 +23,11 @@ class SearchRequest(BaseModel):
     place_x: int | None = None
     place_y: int | None = None
     place_radius_km: float = 2.0
+    # Document filters
+    file_type: str | None = None
+    file_name: str | None = None
+    year_from: int | None = None
+    year_to: int | None = None
 
 
 @router.post("")
@@ -44,6 +49,10 @@ def search(request: SearchRequest):
         "place_x": place_x,
         "place_y": place_y,
         "place_radius": request.place_radius_km * 1000,
+        "file_type": request.file_type,
+        "file_name": request.file_name,
+        "year_from": request.year_from,
+        "year_to": request.year_to,
     }
 
     searcher = Searcher(Path(request.index_dir))

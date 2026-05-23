@@ -109,6 +109,15 @@ def extract_coordinates(text: str) -> dict:
     }
 
 
+# ── Year extraction ───────────────────────────────────────────────────────────
+
+_YEAR_RE = re.compile(r"\b(19[7-9]\d|20[0-3]\d)\b")
+
+
+def extract_years(text: str) -> list[int]:
+    return sorted({int(m.group(1)) for m in _YEAR_RE.finditer(text)})
+
+
 # ── Place name geocoding via PDOK Locatieserver ───────────────────────────────
 
 _PDOK_URL = "https://api.pdok.nl/bzk/locatieserver/search/v3_1/free"

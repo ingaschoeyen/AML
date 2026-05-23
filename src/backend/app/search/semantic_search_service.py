@@ -21,8 +21,27 @@ def _matches_coord_filter(
     place_x: int | None,
     place_y: int | None,
     place_radius: float,
+    file_type: str | None = None,
+    file_name: str | None = None,
+    year_from: int | None = None,
+    year_to: int | None = None,
 ) -> bool:
-    """Return True when the doc passes all active coordinate filters."""
+    """Return True when the doc passes all active filters."""
+    if file_type is not None and doc.get("file_type", "").lower() != file_type.lower():
+        return False
+
+    if file_name is not None and file_name.lower() not in doc.get("file_name", "").lower():
+        return False
+
+    if year_from is not None or year_to is not None:
+        years = doc.get("years", [])
+        if not years:
+            return False
+        if year_from is not None and max(years) < year_from:
+            return False
+        if year_to is not None and min(years) > year_to:
+            return False
+
     coords = doc.get("coordinates", {})
 
     if road is not None:
@@ -188,6 +207,10 @@ class Searcher:
         place_x: int | None = None,
         place_y: int | None = None,
         place_radius: float = 2000.0,
+        file_type: str | None = None,
+        file_name: str | None = None,
+        year_from: int | None = None,
+        year_to: int | None = None,
     ) -> list[dict]:
         if self._bm25 is None or self._corpus_tokens is None:
             raise ValueError("BM25 index is not available. Build BM25 index first or use mode='semantic'.")
@@ -206,7 +229,7 @@ class Searcher:
 
         output = []
         for doc_id, s in zip(doc_ids, raw_scores):
-            if not _matches_coord_filter(self._doc_store[doc_id], road, hm, hm_radius, place_x, place_y, place_radius):
+            if not _matches_coord_filter(self._doc_store[doc_id], road, hm, hm_radius, place_x, place_y, place_radius, file_type, file_name, year_from, year_to):
                 continue
             output.append({
                 **self._doc_store[doc_id],
@@ -232,6 +255,10 @@ class Searcher:
         place_x: int | None = None,
         place_y: int | None = None,
         place_radius: float = 2000.0,
+        file_type: str | None = None,
+        file_name: str | None = None,
+        year_from: int | None = None,
+        year_to: int | None = None,
     ) -> list[dict]:
         model = self._load_bge_model()
         embeddings = self._load_embeddings()
@@ -252,7 +279,7 @@ class Searcher:
         output = []
         for idx in ranked_indices:
             doc_id = int(idx)
-            if not _matches_coord_filter(self._doc_store[doc_id], road, hm, hm_radius, place_x, place_y, place_radius):
+            if not _matches_coord_filter(self._doc_store[doc_id], road, hm, hm_radius, place_x, place_y, place_radius, file_type, file_name, year_from, year_to):
                 continue
             output.append({
                 **self._doc_store[doc_id],
@@ -278,6 +305,10 @@ class Searcher:
         place_x: int | None = None,
         place_y: int | None = None,
         place_radius: float = 2000.0,
+        file_type: str | None = None,
+        file_name: str | None = None,
+        year_from: int | None = None,
+        year_to: int | None = None,
     ) -> list[dict]:
         
         if self._bm25 is None:
@@ -286,8 +317,8 @@ class Searcher:
         # Retrieve a broader candidate pool before fusion
         pool = min(top_k * 5, len(self._doc_store))
 
-        bm25_results = self.search_bm25(query,    top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius)
-        sem_results  = self.search_semantic(query, top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius)
+        bm25_results = self.search_bm25(query,    top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius, file_type=file_type, file_name=file_name, year_from=year_from, year_to=year_to)
+        sem_results  = self.search_semantic(query, top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius, file_type=file_type, file_name=file_name, year_from=year_from, year_to=year_to)
 
         bm25_ids = [r["id"] for r in bm25_results]
         sem_ids  = [r["id"] for r in sem_results]

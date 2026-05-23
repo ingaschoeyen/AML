@@ -1,10 +1,13 @@
 from pathlib import Path
 import json
 
+import bm25s
 import numpy as np
 import pandas as pd
 
-from app.search.coordinates import extract_coordinates
+from app.search import config
+from app.search.coordinates import extract_coordinates, extract_years
+from app.processing.text_preprocessing_service import process_text
 
 
 class IndexBuilderService:
@@ -61,6 +64,7 @@ class IndexBuilderService:
                     if "page_number" in file_rows.columns
                     else None,
                     "coordinates": extract_coordinates(full_text),
+                    "years": extract_years(full_text),
                 }
             )
 
@@ -74,6 +78,25 @@ class IndexBuilderService:
             json.dump(texts, f, ensure_ascii=False, indent=2)
 
         np.save(index_dir / "embeddings.npy", np.vstack(vectors))
+
+        # BM25 index
+        corpus_tokens = []
+        for doc, text in zip(doc_store, texts):
+            filename_text = Path(doc["file_name"]).stem.replace("_", " ").replace("-", " ")
+            corpus_tokens.append(
+                process_text(filename_text, config.NER_MODEL)
+                + process_text(text, config.NER_MODEL, config.NER_BOOST_TYPES, config.NER_BOOST_FACTOR)
+            )
+
+        bm25_dir = index_dir / "bm25_index"
+        bm25_dir.mkdir(parents=True, exist_ok=True)
+
+        retriever = bm25s.BM25()
+        retriever.index(corpus_tokens)
+        retriever.save(str(bm25_dir), corpus=corpus_tokens)
+
+        with open(bm25_dir / "corpus_tokens.json", "w", encoding="utf-8") as f:
+            json.dump(corpus_tokens, f, ensure_ascii=False)
 
         return {
             "index_dir": str(index_dir),

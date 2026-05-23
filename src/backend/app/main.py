@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.models.schemas import IngestionRequest, IngestionResponse
@@ -6,8 +7,18 @@ from app.api.embedding_controller import router as embedding_router
 from app.api.search_controller import router as search_router
 # to run: cd src/backend and then uvicorn app.main:app --reload
 from app.api.index_controller import router as index_router
+from app.search import config
+from app.processing.text_preprocessing_service import download_nltk_data, get_nlp_model
 
-app = FastAPI(title="Document Semantic Search API")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    download_nltk_data()
+    get_nlp_model(config.NER_MODEL)
+    yield
+
+
+app = FastAPI(title="Document Semantic Search API", lifespan=lifespan)
 
 # Enable CORS so browser clients can call the API from other origins.
 app.add_middleware(
