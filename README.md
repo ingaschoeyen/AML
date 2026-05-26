@@ -8,8 +8,8 @@ Runs: file inventory → change detection → OCR/text extraction → embeddings
 Endpoint: POST http://localhost:8000/api/ingestion/start
 Body:
 {
-  "root_folder": "../../data",
-  "output_dir": "../../results",
+  "root_folder": "../../test_inventory",
+  "output_dir": "../../test_result",
   "tesseract_cmd": null,
   "min_direct_text_length": 30
 }
