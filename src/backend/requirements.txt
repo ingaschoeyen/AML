@@ -11,3 +11,4 @@ python-docx
 langchain-text-splitters
 sentence-transformers
 spacy
+nl_core_news_lg @ https://github.com/explosion/spacy-models/releases/download/nl_core_news_lg-3.8.0/nl_core_news_lg-3.8.0.tar.gz

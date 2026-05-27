@@ -44,14 +44,27 @@ def _hm_to_float(groups: tuple) -> float | None:
     return None
 
 
+_ROAD_ONLY_RE = re.compile(r"\b" + _ROAD + r"\b", re.IGNORECASE)
+
+
 def extract_road_refs(text: str) -> list[dict]:
-    """Return list of {road, hm} dicts found in text."""
+    """Return list of {road, hm} dicts found in text. hm is None for road-only mentions."""
     refs: list[dict] = []
+    roads_with_hm: set[str] = set()
+
     for m in _ROAD_HM_RE.finditer(text):
         road = m.group(1).upper()
         hm = _hm_to_float(m.groups()[1:])
         if hm is not None:
             refs.append({"road": road, "hm": round(hm, 3)})
+            roads_with_hm.add(road)
+
+    for m in _ROAD_ONLY_RE.finditer(text):
+        road = m.group(1).upper()
+        if road not in roads_with_hm:
+            refs.append({"road": road, "hm": None})
+            roads_with_hm.add(road)
+
     return refs
 
 
@@ -94,6 +107,15 @@ def extract_coordinates(text: str) -> dict:
         "road_refs": extract_road_refs(text),
         "rd_coords": extract_rd_coords(text),
     }
+
+
+# ── Year extraction ───────────────────────────────────────────────────────────
+
+_YEAR_RE = re.compile(r"\b(19[7-9]\d|20[0-3]\d)\b")
+
+
+def extract_years(text: str) -> list[int]:
+    return sorted({int(m.group(1)) for m in _YEAR_RE.finditer(text)})
 
 
 # ── Place name geocoding via PDOK Locatieserver ───────────────────────────────
