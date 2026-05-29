@@ -1,0 +1,258 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 24px;
+    font-family: Arial, sans-serif;
+    background: #f5f7fa;
+    color: #1f2937;
+}
+
+.page-shell {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.search-container {
+    width: 100%;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 16px;
+    margin-bottom: 24px;
+    background: #ffffff;
+    border: 1px solid #dbe3ee;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.search-container input[type="text"] {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.search-container input[type="search"]:focus{
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(31, 79, 130, 0.12);
+    border-color: #1f4f82;
+    width: 400px;
+}
+.search-container input[type="text"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(31, 79, 130, 0.12);
+    border-color: #1f4f82;
+}
+.search-container button {
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 8px;
+    background: #1f4f82;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background: #173e66;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) minmax(0, 4fr);
+    gap: 24px;
+    width: 100%;
+    align-items: start;
+}
+
+.column {
+    min-width: 0;
+}
+
+.search-filters,
+#search-results {
+    background: #ffffff;
+    border: 1px solid #dbe3ee;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.search-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filter-group > label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #334155;
+}
+
+.search-filters select,
+.search-filters input[type="date"],
+.search-filters input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+}
+
+.checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #f8fbff;
+    border: 1px solid #dbe3ee;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: #1f2937;
+    cursor: pointer;
+}
+
+.checkbox-option input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: #1f4f82;
+}
+
+.checkbox-option:hover {
+    background: #eef5fc;
+    border-color: #b8cbe0;
+}
+
+.date-range-group,
+.coordinate-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.coordinate-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.coordinate-field span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.coordinate-field input,
+.date-range-group input {
+    width: 100%;
+}
+
+#search-results {
+    min-height: 420px;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.results-header h2 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.results-meta {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.results-empty {
+    color: #6b7280;
+    padding: 28px;
+    text-align: center;
+}
+
+.result-item {
+    padding: 12px;
+    border: 1px solid #e6edf6;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.result-item h3 {
+    margin: 0 0 6px 0;
+    font-size: 1rem;
+}
+
+.result-item p {
+    margin: 0;
+    color: #374151;
+}
+footer {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+#back-to-top {
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    body {
+        padding: 16px;
+    }
+
+    .search-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-container button {
+        width: 100%;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .checkbox-group,
+    .date-range-group,
+    .coordinate-grid {
+        grid-template-columns: 1fr;
+    }
+}

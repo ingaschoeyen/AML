@@ -1,0 +1,183 @@
+// search.js
+
+// Usage: function that gets query from website and sends it to backend search function
+// receives list of 
+
+// TODO: 
+//      add filters to search query, 
+//     add loading spinner while waiting for results,
+//     add error handling for failed search requests
+//     add function for  loading pdf in page when clicking on search result
+
+
+
+let apiURL = "http://localhost:8000/api/search";
+
+function initCheckboxGroup(allId, optionSelector) {
+    const allCheckbox = document.getElementById(allId);
+    const optionCheckboxes = Array.from(document.querySelectorAll(optionSelector));
+
+    if (!allCheckbox || optionCheckboxes.length === 0) {
+        return;
+    }
+
+    const syncAllState = () => {
+        const allChecked = optionCheckboxes.every(checkbox => checkbox.checked);
+        const anyChecked = optionCheckboxes.some(checkbox => checkbox.checked);
+
+        allCheckbox.checked = !anyChecked || allChecked;
+    };
+
+    allCheckbox.addEventListener("change", () => {
+        optionCheckboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        allCheckbox.checked = true;
+    });
+
+    optionCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", () => {
+            if (checkbox.checked) {
+                allCheckbox.checked = false;
+            }
+            syncAllState();
+        });
+    });
+
+    syncAllState();
+}
+
+function getSelectedValues(allId, optionSelector) {
+    const allCheckbox = document.getElementById(allId);
+    const optionCheckboxes = Array.from(document.querySelectorAll(optionSelector));
+
+    if (allCheckbox && allCheckbox.checked) {
+        return ["all"];
+    }
+
+    return optionCheckboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
+}
+
+function getSelectedRadioValue(name, defaultValue) {
+    const selectedOption = document.querySelector(`input[name="${name}"]:checked`);
+    return selectedOption ? selectedOption.value : defaultValue;
+}
+
+function getInputValue(id, defaultValue = "") {
+    const element = document.getElementById(id);
+
+    if (!element || element.value === null || element.value === "") {
+        return defaultValue;
+    }
+
+    return element.value;
+}
+
+function getNumberInputValue(id, defaultValue = undefined) {
+    const rawValue = getInputValue(id, "");
+
+    if (rawValue === "") {
+        return defaultValue;
+    }
+
+    const parsedValue = Number(rawValue);
+    return Number.isNaN(parsedValue) ? defaultValue : parsedValue;
+}
+
+function buildSearchBody(query) {
+    const fileTypes = getSelectedValues("file-type-all", ".file-type-option");
+    const selectedFileType = fileTypes.length === 0 || fileTypes.includes("all") ? undefined : fileTypes[0];
+    const selectedMode = getSelectedRadioValue("search-type", "semantic");
+
+    const body = {
+        query,
+        index_dir: "../results/index",
+        mode: selectedMode,
+        file_type: selectedFileType,
+        year_from: getNumberInputValue("start-date"),
+        year_to: getNumberInputValue("end-date"),
+        place_x: getNumberInputValue("longitude"),
+        place_y: getNumberInputValue("latitude"),
+        place_radius_km: getNumberInputValue("radius", 2.0),
+        road: getInputValue("road", undefined),
+        hm: getNumberInputValue("hm"),
+        hm_radius: getNumberInputValue("hm-radius", 1.0),
+        top_k: getNumberInputValue("top-k", 10)
+    };
+
+    return Object.fromEntries(
+        Object.entries(body).filter(([, value]) => value !== undefined && value !== "")
+    );
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    initCheckboxGroup("file-type-all", ".file-type-option");
+    initCheckboxGroup("filte_")
+});
+
+function createPreviewCard(result) {
+    let card = document.createElement("div");
+    card.className = "result-card";
+    
+    let title = document.createElement("h3");
+    title.textContent = result.file_name;
+    card.appendChild(title);
+    
+    let snippet = document.createElement("p");
+    snippet.textContent = result.snippet;
+    card.appendChild(snippet);
+    
+    let link = document.createElement("a");
+    link.href = result.source_path; // TODO: make this dynamic based on user/session;
+    link.textContent = "View document";
+    link.target = "_blank";
+    card.appendChild(link);
+    return card;
+}
+
+async function searchRequest(query) {
+    const body = buildSearchBody(query);
+    console.log("Search request body:", body);
+    
+    let t_start =  new Date().getTime();
+    let response = await fetch(apiURL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        },
+        body: JSON.stringify(body)
+    });
+    let t_end = new Date().getTime();
+    console.log(`Search request took ${(t_end - t_start) / 1000} seconds`);
+    return response.json();
+}
+
+async function search(){
+    let query = document.getElementById("search-input").value;
+    console.log("Searching for:", query);
+    document.getElementById("results-list").innerHTML = "<div class='results-empty'>Loading...</div>";
+    //  construct body of API request with filters
+
+    try {
+        let data = await searchRequest(query);
+        console.log("Search results:", data);
+        let resultsDiv = document.getElementById("results-list");
+            resultsDiv.innerHTML = "";
+            if (!data.results || data.results.length === 0) {
+                resultsDiv.innerHTML = "<div class='results-empty'>No results found.</div>";
+                return;
+            }
+
+            data.results.forEach(result => {
+                console.log("processing result:", result.file_name);
+                let card = createPreviewCard(result);
+                card.className = "result-item result-card";
+                resultsDiv.appendChild(card);
+            });
+        }
+    catch (error) {
+        console.error("Search error:", error);
+        document.getElementById("results-list").innerHTML = "<div class='results-empty'>An error occurred while searching. Please try again.</div>";
+    }
+}

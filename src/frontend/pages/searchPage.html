@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AML Search</title>
+    <script src="../assets/js/search.js"></script>
+    <link rel="stylesheet" href="../assets/css/search.css">
+</head>
+
+<body>
+    <div class="page-shell">
+        <div class="search-container">
+            <input type="search" id="search-input" placeholder="Search..." aria-label="Search query">
+            <button type="button" id="search-button" onclick="search()">Search</button>
+        </div>
+        <div class="content-grid">
+            <aside class="column filters-column">
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <label>Search Type</label>
+                        <div class="radio-group" id="search-type-group">
+                            <label class="checkbox-option">
+                                <input type="radio" name="search-type" class="search-type-option" value="bm25">
+                                <span>Classic</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="radio" name="search-type" class="search-type-option" value="semantic" checked>
+                                <span>Semantic</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="radio" name="search-type" class="search-type-option" value="hybrid">
+                                <span>Hybrid</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>File Type</label>
+                        <div class="checkbox-group" id="file-type-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="file-type-all" value="all" checked>
+                                <span>All</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" class="file-type-option" value="pdf">
+                                <span>PDF</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" class="file-type-option" value="docx">
+                                <span>DOCX</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" class="file-type-option" value="txt">
+                                <span>TXT</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" class="file-type-option" value="jpg">
+                                <span>JPG</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Date Range</label>
+                        <div class="date-range-group">
+                            <input type="number" id="start-date" min="1000" max="9999" aria-label="Start date" placeholder="From (year)">
+                            <input type="number" id="end-date" min="1000" max="9999" aria-label="End date" placeholder="To (year)">
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Coordinate Range</label>
+                        <div class="coordinate-grid">
+                            <div class="coordinate-field">
+                                <input type="number" id="longitude" step="any" placeholder="Longitude">
+                            </div>
+                            <div class="coordinate-field">
+                                <input type="number" id="latitude" step="any" placeholder="Latitude">
+                            </div>
+                        </div>
+                        <label> Coordinate Search Radius</label>
+                        <div class="search-radius">
+                            <input type="number" id="radius" step="any" placeholder="Radius in km">
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Road</label>
+                        <input type="text" id="road" placeholder="Road name or number">
+                        <input type="number" id="hm" placeholder="Point on road (HM)">
+                        <input type="number" id="hm-radius" placeholder="Road search radius (HM)">
+                    </div>
+                </div>
+            </aside>
+            <main class="column results-column">
+                <div id="search-results" aria-live="polite">
+                    <div class="results-header">
+                        <h2>Search Results</h2>
+                        <div class="results-meta" aria-hidden="true"></div>
+                    </div>
+                    <div id="results-list" class="results-list">
+                        <div class="results-empty">No results yet. Enter a query and press Search.</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <footer>
+            <button id="back-to-top" onclick="window.scrollTo(0, 0);">Back to Top</button>
+        </footer>
+    </div>
+</body>
+</html>
