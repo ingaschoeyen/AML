@@ -13,12 +13,14 @@ class IngestionPipeline:
         root_folder: str | Path,
         output_dir: str | Path = "results",
         tesseract_cmd: str | None = None,
+        semantic_embedding_model: str = "clips/e5-large-trm-nl",
         min_direct_text_length: int = 30,
     ):
         self.root_folder = Path(root_folder)
         self.output_dir = Path(output_dir)
         self.tesseract_cmd = tesseract_cmd
         self.min_direct_text_length = min_direct_text_length
+        self.semantic_embedding_model = semantic_embedding_model
         self.csv_repository = CSVRepository()
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -78,7 +80,7 @@ class IngestionPipeline:
         self.csv_repository.save_extraction(extraction_df, extraction_path)
 
         embedder = SemanticEmbedder(
-            model_name="clips/e5-small-trm-nl",
+            model_name=self.semantic_embedding_model,
             recursive=True,
             merge_type="mean",
             chunk_size=1000,

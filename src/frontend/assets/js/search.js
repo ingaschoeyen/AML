@@ -13,49 +13,32 @@
 
 let apiURL = "http://localhost:8000/api/search";
 
-function initCheckboxGroup(allId, optionSelector) {
-    const allCheckbox = document.getElementById(allId);
-    const optionCheckboxes = Array.from(document.querySelectorAll(optionSelector));
-
-    if (!allCheckbox || optionCheckboxes.length === 0) {
-        return;
-    }
-
-    const syncAllState = () => {
-        const allChecked = optionCheckboxes.every(checkbox => checkbox.checked);
-        const anyChecked = optionCheckboxes.some(checkbox => checkbox.checked);
-
-        allCheckbox.checked = !anyChecked || allChecked;
-    };
-
-    allCheckbox.addEventListener("change", () => {
-        optionCheckboxes.forEach(checkbox => {
-            checkbox.checked = false;
-        });
-        allCheckbox.checked = true;
-    });
-
-    optionCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener("change", () => {
-            if (checkbox.checked) {
-                allCheckbox.checked = false;
-            }
-            syncAllState();
-        });
-    });
-
-    syncAllState();
-}
-
-function getSelectedValues(allId, optionSelector) {
-    const allCheckbox = document.getElementById(allId);
-    const optionCheckboxes = Array.from(document.querySelectorAll(optionSelector));
+function getSelectedFileTypes() {
+    const allCheckbox = document.getElementById("file-type-all");
+    const optionCheckboxes = Array.from(document.querySelectorAll(".file-type-option"));
 
     if (allCheckbox && allCheckbox.checked) {
         return ["all"];
     }
 
     return optionCheckboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
+}
+
+function setupFileTypeGroup() {
+    const allCheckbox = document.getElementById("file-type-all");
+    const optionCheckboxes = Array.from(document.querySelectorAll(".file-type-option"));
+
+    if (!allCheckbox || optionCheckboxes.length === 0) return;
+
+    allCheckbox.addEventListener("change", () => {
+        if (allCheckbox.checked) {
+            optionCheckboxes.forEach(cb => cb.checked = false);
+        }
+    });
+
+    optionCheckboxes.forEach(cb => cb.addEventListener("change", () => {
+        if (cb.checked && allCheckbox.checked) allCheckbox.checked = false;
+    }));
 }
 
 function getSelectedRadioValue(name, defaultValue) {
@@ -85,7 +68,7 @@ function getNumberInputValue(id, defaultValue = undefined) {
 }
 
 function buildSearchBody(query) {
-    const fileTypes = getSelectedValues("file-type-all", ".file-type-option");
+    const fileTypes = getSelectedFileTypes();
     const selectedFileType = fileTypes.length === 0 || fileTypes.includes("all") ? undefined : fileTypes[0];
     const selectedMode = getSelectedRadioValue("search-type", "semantic");
 
@@ -111,8 +94,7 @@ function buildSearchBody(query) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    initCheckboxGroup("file-type-all", ".file-type-option");
-    initCheckboxGroup("filte_")
+    setupFileTypeGroup();
 });
 
 function createPreviewCard(result) {
