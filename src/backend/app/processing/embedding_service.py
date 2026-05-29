@@ -10,7 +10,8 @@ import tqdm
 class VisualEmbedder:
     def __init__(self, params: dict | None = None):
         self.params = params or {}
-        self.model = None
+        self.model = params.get("model")
+        self.model
         print("Visual embedding model placeholder initialized")
 
 
