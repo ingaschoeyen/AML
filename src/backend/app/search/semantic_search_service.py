@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 import bm25s
 import numpy as np
+import pickle as pkl
 
 from app.search import config
 from app.processing.text_preprocessing_service import process_text
@@ -129,14 +130,21 @@ class Searcher:
         self._embed_path = index_dir / "embeddings.npy"
         self._embeddings: np.ndarray | None = None
         self._bge_model = None
+        self._e5_model = None
 
     # ------------------------------------------------------------------
     # Internal loaders
     # ------------------------------------------------------------------
 
-    def _load_embeddings(self) -> np.ndarray:
-        if self._embeddings is None:
+    def _load_embeddings(self, embedding_model: str=None) -> np.ndarray:
+        if self._embeddings is None and embedding_model is None:
             self._embeddings = np.load(str(self._embed_path)).astype(np.float32)
+        elif self._embeddings is None and embedding_model is not None:  
+            embed_path = index / embedding_model.strip('/')[-1] / f"embeddings.pkl"
+            if not embed_path.exists():
+                raise ValueError(f"Embeddings file not found for model '{embedding_model}': {embed_path}")
+            self._embeddings = pkl.load(open(embed_path, "rb")).astype(np.float32)
+
         return self._embeddings
 
     def _load_bge_model(self):
@@ -147,6 +155,16 @@ class Searcher:
             device = "cuda" if torch.cuda.is_available() else "cpu"
             self._bge_model = SentenceTransformer(config.BGE_MODEL_NAME, device=device)
         return self._bge_model
+
+    def _load_e5_model(self):
+        if self._e5_model is None:
+            print("Loading E5 model for query encoding ...", file=sys.stderr)
+            from sentence_transformers import SentenceTransformer
+            import torch
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+            self._e5_model = SentenceTransformer(config.E5_MODEL_NAME, device=device)
+        return self._e5_model
+
 
     # ------------------------------------------------------------------
     # Snippet extraction
@@ -249,6 +267,7 @@ class Searcher:
         self,
         query: str,
         top_k: int = config.DEFAULT_TOP_K,
+        embedding_model: str | None = 'clips/e5-small-trm-nl',
         road: str | None = None,
         hm: float | None = None,
         hm_radius: float = 1.0,
@@ -260,8 +279,8 @@ class Searcher:
         year_from: int | None = None,
         year_to: int | None = None,
     ) -> list[dict]:
-        model = self._load_bge_model()
-        embeddings = self._load_embeddings()
+        model = self._load_bge_model() if embedding_model == 'BAAI/bge-m3' else self._load_e5_model()
+        embeddings = self._load_embeddings(embedding_model)
 
         query_vec: np.ndarray = model.encode(
             [query], batch_size=1, normalize_embeddings=True, convert_to_numpy=True

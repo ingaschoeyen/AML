@@ -8,9 +8,16 @@
     </head>
     <body>
         <div class="page-shell">
-            <div class="pdf-viewer-container">
-                <div id="pdf-renderer" class="pdf-renderer"></div>
-            </div>
+            <details id="pdf-viewer-panel" class="pdf-viewer-panel" open>
+                <summary>PDF Preview</summary>
+                <div class="pdf-viewer-toolbar">
+                    <input id="pdf-path-input" type="text" placeholder="Paste a PDF path or URL" aria-label="PDF path">
+                    <button type="button" onclick="loadPDF(document.getElementById('pdf-path-input').value)">Load PDF</button>
+                    <button type="button" class="secondary-button" onclick="clearPDF()">Clear</button>
+                </div>
+                <p class="pdf-viewer-status" data-pdf-status>Paste a PDF path above to load it in the preview.</p>
+                <iframe id="pdf-viewer" class="pdf-viewer-frame" title="PDF preview"></iframe>
+            </details>
         </div>  
 
     </body>

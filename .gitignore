@@ -10,6 +10,7 @@ __pycache__/
 # ignore heavy/generated data
 outputs/
 data/
+results/
 *.csv
 
 # but allow small test data if needed

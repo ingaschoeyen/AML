@@ -23,7 +23,10 @@ app = FastAPI(title="Document Semantic Search API", lifespan=lifespan)
 # Enable CORS so browser clients can call the API from other origins.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # change to specific origins in production
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

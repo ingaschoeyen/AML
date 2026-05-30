@@ -57,12 +57,15 @@ def search(request: SearchRequest):
 
     searcher = Searcher(Path(request.index_dir))
 
+
     if request.mode == "bm25":
         results = searcher.search_bm25(request.query, top_k=request.top_k, **filters)
     elif request.mode == "semantic":
-        results = searcher.search_semantic(request.query, top_k=request.top_k, **filters)
+        embedding_model = request.embedding_model if hasattr(request, 'embedding_model') else 'clips/e5-small-trm-nl'
+        results = searcher.search_semantic(request.query, top_k=request.top_k, embedding_model=embedding_model, **filters)
     else:
-        results = searcher.search_hybrid(request.query, top_k=request.top_k, **filters)
+        embedding_model = request.embedding_model if hasattr(request, 'embedding_model') else 'clips/e5-small-trm-nl'
+        results = searcher.search_hybrid(request.query, top_k=request.top_k, embedding_model=embedding_model, **filters)
 
     return {
         "status": "completed",

@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>AML Search</title>
+    <script src="../assets/js/pdfViewer.js"></script>
     <script src="../assets/js/search.js"></script>
     <link rel="stylesheet" href="../assets/css/search.css">
 </head>
@@ -31,6 +32,13 @@
                                 <span>Hybrid</span>
                             </label>
                         </div>
+                        <label for="embedding-model-select">Embedding Model</label>
+                        <select id="embedding-model-select" aria-label="Select embedding model">
+                            <option value="clips/e5-small-trm-nl" selected>e5-small-trm-nl</option>
+                            <option value="clips/e5-base-trm-nl" selected>e5-base-trm-nl</option>
+                            <option value="clips/e5-large-trm-nl" selected>e5-large-trm-nl</option>    
+                            <option value="BAAI/bge-m3">bge-m3</option>
+                        </select>   
                     </div>
 
                     <div class="filter-group">
@@ -100,6 +108,11 @@
                         <div class="results-empty">No results yet. Enter a query and press Search.</div>
                     </div>
                 </div>
+                <details id="pdf-viewer-panel" class="pdf-viewer-panel">
+                    <summary>PDF Preview</summary>
+                    <p class="pdf-viewer-status" data-pdf-status>Choose a result to preview the PDF here.</p>
+                    <iframe id="pdf-viewer" class="pdf-viewer-frame" title="PDF preview"></iframe>
+                </details>
             </main>
         </div>
         <footer>

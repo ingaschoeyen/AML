@@ -9,8 +9,6 @@
 //     add error handling for failed search requests
 //     add function for  loading pdf in page when clicking on search result
 
-
-
 let apiURL = "http://localhost:8000/api/search";
 
 function getSelectedFileTypes() {
@@ -76,6 +74,7 @@ function buildSearchBody(query) {
         query,
         index_dir: "../results/index",
         mode: selectedMode,
+        embedding_model: getInputValue("embedding-model-select", "clips/e5-small-trm-nl"),
         file_type: selectedFileType,
         year_from: getNumberInputValue("start-date"),
         year_to: getNumberInputValue("end-date"),
@@ -111,9 +110,18 @@ function createPreviewCard(result) {
     
     let link = document.createElement("a");
     link.href = result.source_path; // TODO: make this dynamic based on user/session;
-    link.textContent = "View document";
+    link.textContent = result.source_path;
     link.target = "_blank";
     card.appendChild(link);
+
+    let viewButton = document.createElement("button");
+    viewButton.className = "view-pdf-button";
+    viewButton.textContent = "View PDF";
+    viewButton.addEventListener("click", () => {
+        loadPDF(result.source_path); // TODO: make this dynamic based on user/session;
+    });
+    card.appendChild(viewButton);
+
     return card;
 }
 
@@ -125,8 +133,7 @@ async function searchRequest(query) {
     let response = await fetch(apiURL, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
+            "Content-Type": "application/json"
         },
         body: JSON.stringify(body)
     });
