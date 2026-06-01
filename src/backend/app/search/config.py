@@ -4,7 +4,7 @@ from pathlib import Path
 # Paths (overridable via CLI args; these are the defaults)
 # ---------------------------------------------------------------------------
 CSV_PATH: Path = Path("data.csv")
-INDEX_DIR: Path = Path("index")
+INDEX_DIR: Path = Path("../../results/index")
 
 # ---------------------------------------------------------------------------
 # BM25F field weights

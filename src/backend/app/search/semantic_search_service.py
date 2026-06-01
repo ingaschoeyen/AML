@@ -38,9 +38,9 @@ def _matches_coord_filter(
         years = doc.get("years", [])
         if not years:
             return False
-        if year_from is not None and max(years) < year_from:
-            return False
-        if year_to is not None and min(years) > year_to:
+        lo = year_from if year_from is not None else 0
+        hi = year_to if year_to is not None else 9999
+        if not any(lo <= y <= hi for y in years):
             return False
 
     coords = doc.get("coordinates", {})
@@ -318,6 +318,7 @@ class Searcher:
         self,
         query: str,
         top_k: int = config.DEFAULT_TOP_K,
+        embedding_model: str | None = None,
         road: str | None = None,
         hm: float | None = None,
         hm_radius: float = 1.0,
@@ -337,7 +338,7 @@ class Searcher:
         pool = min(top_k * 5, len(self._doc_store))
 
         bm25_results = self.search_bm25(query,    top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius, file_type=file_type, file_name=file_name, year_from=year_from, year_to=year_to)
-        sem_results  = self.search_semantic(query, top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius, file_type=file_type, file_name=file_name, year_from=year_from, year_to=year_to)
+        sem_results  = self.search_semantic(query, top_k=pool, embedding_model=embedding_model, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius, file_type=file_type, file_name=file_name, year_from=year_from, year_to=year_to)
 
         bm25_ids = [r["id"] for r in bm25_results]
         sem_ids  = [r["id"] for r in sem_results]

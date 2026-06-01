@@ -1,9 +1,6 @@
-from pathlib import Path
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from pydantic import BaseModel
-from app.search.semantic_search_service import Searcher
 from app.search.coordinates import geocode_place
-from app.processing.text_preprocessing_service import download_nltk_data
 
 
 router = APIRouter(prefix="/api/search", tags=["Search"])
@@ -28,13 +25,13 @@ class SearchRequest(BaseModel):
     file_name: str | None = None
     year_from: int | None = None
     year_to: int | None = None
+    embedding_model: str | None = None
 
 
 @router.post("")
-def search(request: SearchRequest):
-    download_nltk_data()
+def search(request: SearchRequest, http_request: Request):
+    searcher = http_request.app.state.searcher
 
-    # Resolve place_name to RD coords when raw coords are not supplied
     place_x, place_y = request.place_x, request.place_y
     if request.place_name and place_x is None:
         resolved = geocode_place(request.place_name)
@@ -55,17 +52,12 @@ def search(request: SearchRequest):
         "year_to": request.year_to,
     }
 
-    searcher = Searcher(Path(request.index_dir))
-
-
     if request.mode == "bm25":
         results = searcher.search_bm25(request.query, top_k=request.top_k, **filters)
     elif request.mode == "semantic":
-        embedding_model = request.embedding_model if hasattr(request, 'embedding_model') else 'clips/e5-small-trm-nl'
-        results = searcher.search_semantic(request.query, top_k=request.top_k, embedding_model=embedding_model, **filters)
+        results = searcher.search_semantic(request.query, top_k=request.top_k, embedding_model=request.embedding_model, **filters)
     else:
-        embedding_model = request.embedding_model if hasattr(request, 'embedding_model') else 'clips/e5-small-trm-nl'
-        results = searcher.search_hybrid(request.query, top_k=request.top_k, embedding_model=embedding_model, **filters)
+        results = searcher.search_hybrid(request.query, top_k=request.top_k, embedding_model=request.embedding_model, **filters)
 
     return {
         "status": "completed",
