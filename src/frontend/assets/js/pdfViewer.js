@@ -1,6 +1,49 @@
 // pdfViewer.js
 
 let currentPdfObjectUrl = null;
+const pdfServerOrigin = "http://localhost:5500";
+
+function buildServerPdfUrl(relativePath) {
+    if (!relativePath) {
+        return relativePath;
+    }
+
+    if (/^https?:\/\//i.test(relativePath)) {
+        return relativePath;
+    }
+
+    const normalizedPath = relativePath.startsWith("/") ? relativePath : `/${relativePath}`;
+    return `${pdfServerOrigin}${normalizedPath}`;
+}
+
+function toPdfUrl(pathToPdf) {
+    if (!pathToPdf) {
+        return pathToPdf;
+    }
+
+    if (/^https?:\/\//i.test(pathToPdf)) {
+        return pathToPdf;
+    }
+
+    const normalizedPath = pathToPdf.replace(/\\/g, "/");
+    const publicDataIndex = normalizedPath.indexOf("/public/data/");
+
+    if (publicDataIndex !== -1) {
+        return buildServerPdfUrl(`/data/${normalizedPath.slice(publicDataIndex + "/public/data/".length)}`);
+    }
+
+    const legacyDataIndex = normalizedPath.indexOf("/src/data/");
+
+    if (legacyDataIndex !== -1) {
+        return buildServerPdfUrl(`/data/${normalizedPath.slice(legacyDataIndex + "/src/data/".length)}`);
+    }
+
+    if (normalizedPath.startsWith("data/")) {
+        return buildServerPdfUrl(`/${normalizedPath}`);
+    }
+
+    return buildServerPdfUrl(normalizedPath);
+}
 
 function getPdfViewerElements(viewerId) {
     const viewer = document.getElementById(viewerId);
@@ -25,7 +68,8 @@ function setPdfStatus(statusElement, message, isError = false) {
     statusElement.dataset.state = isError ? "error" : "ready";
 }
 
-function loadPDF(pathToPdf, viewerId = "pdf-viewer-panel") {
+async function loadPDF(pathToPdf, viewerId = "pdf-viewer-panel") {
+    const pdfUrl = toPdfUrl(pathToPdf);
     const { viewer, iframe, status } = getPdfViewerElements(viewerId);
 
     if (!viewer || !iframe) {
@@ -36,35 +80,33 @@ function loadPDF(pathToPdf, viewerId = "pdf-viewer-panel") {
     viewer.open = true;
     viewer.scrollIntoView({ behavior: "smooth", block: "start" });
     setPdfStatus(status, "Loading PDF preview...");
+    try {
+        const response = await fetch(pdfUrl);
 
-    return fetch(pathToPdf)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch PDF: ${response.status} ${response.statusText}`);
-            }
+        if (!response.ok) {
+            throw new Error(`Failed to fetch PDF: ${response.status} ${response.statusText}`);
+        }
 
-            return response.blob();
-        })
-        .then(file => {
-            if (currentPdfObjectUrl) {
-                URL.revokeObjectURL(currentPdfObjectUrl);
-            }
+        const file = await response.blob();
 
-            currentPdfObjectUrl = URL.createObjectURL(file);
-            iframe.src = currentPdfObjectUrl;
-            iframe.setAttribute("title", `PDF preview for ${pathToPdf}`);
-            setPdfStatus(status, `Previewing: ${pathToPdf}`);
-            return currentPdfObjectUrl;
-        })
-        .catch(error => {
-            if (iframe) {
-                iframe.removeAttribute("src");
-            }
+        if (currentPdfObjectUrl) {
+            URL.revokeObjectURL(currentPdfObjectUrl);
+        }
 
-            setPdfStatus(status, `Unable to load PDF: ${pathToPdf}`, true);
-            console.error("PDF load error:", error);
-            throw error;
-        });
+        currentPdfObjectUrl = URL.createObjectURL(file);
+        iframe.src = currentPdfObjectUrl;
+        iframe.setAttribute("title", `PDF preview for ${pdfUrl}`);
+        setPdfStatus(status, `Previewing: ${pdfUrl}`);
+        return currentPdfObjectUrl;
+    } catch (error) {
+        if (iframe) {
+            iframe.removeAttribute("src");
+        }
+
+        setPdfStatus(status, `Unable to load PDF: ${pdfUrl}`, true);
+        console.error("PDF load error:", error);
+        throw error;
+    }
 }
 
 function clearPDF(viewerId = "pdf-viewer-panel") {
@@ -84,4 +126,5 @@ function clearPDF(viewerId = "pdf-viewer-panel") {
 
 window.loadPDF = loadPDF;
 window.clearPDF = clearPDF;
+window.toPdfUrl = toPdfUrl;
 

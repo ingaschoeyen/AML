@@ -14,6 +14,14 @@ from app.processing.text_preprocessing_service import process_text
 from app.search.coordinates import rd_distance
 
 
+_EMBEDDING_SUBDIRS = {
+    "clips/e5-small-trm-nl": "e5-small",
+    "clips/e5-base-trm-nl": "e5-base",
+    "clips/e5-large-trm-nl": "e5-large",
+    "BAAI/bge-m3": "bge-m3",
+}
+
+
 def _matches_coord_filter(
     doc: dict,
     road: str | None,
@@ -139,11 +147,18 @@ class Searcher:
     def _load_embeddings(self, embedding_model: str=None) -> np.ndarray:
         if self._embeddings is None and embedding_model is None:
             self._embeddings = np.load(str(self._embed_path)).astype(np.float32)
-        elif self._embeddings is None and embedding_model is not None:  
-            embed_path = index / embedding_model.strip('/')[-1] / f"embeddings.pkl"
+        elif self._embeddings is None and embedding_model is not None:
+            model_subdir = _EMBEDDING_SUBDIRS.get(embedding_model, embedding_model)
+            embed_path = self._embed_path.parent.parent / model_subdir / "embeddings.pkl"
             if not embed_path.exists():
                 raise ValueError(f"Embeddings file not found for model '{embedding_model}': {embed_path}")
-            self._embeddings = pkl.load(open(embed_path, "rb")).astype(np.float32)
+            with open(embed_path, "rb") as f:
+                embeddings = pkl.load(f)
+
+            if hasattr(embeddings, "columns") and "file_embedding" in embeddings.columns:
+                self._embeddings = np.vstack(embeddings["file_embedding"].to_numpy()).astype(np.float32)
+            else:
+                self._embeddings = np.asarray(embeddings, dtype=np.float32)
 
         return self._embeddings
 
@@ -317,6 +332,7 @@ class Searcher:
     def search_hybrid(
         self,
         query: str,
+        embedding_model: str | None = 'clips/e5-small-trm-nl',
         top_k: int = config.DEFAULT_TOP_K,
         road: str | None = None,
         hm: float | None = None,
@@ -337,7 +353,7 @@ class Searcher:
         pool = min(top_k * 5, len(self._doc_store))
 
         bm25_results = self.search_bm25(query,    top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius, file_type=file_type, file_name=file_name, year_from=year_from, year_to=year_to)
-        sem_results  = self.search_semantic(query, top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius, file_type=file_type, file_name=file_name, year_from=year_from, year_to=year_to)
+        sem_results  = self.search_semantic(query, embedding_model=embedding_model, top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius, file_type=file_type, file_name=file_name, year_from=year_from, year_to=year_to)
 
         bm25_ids = [r["id"] for r in bm25_results]
         sem_ids  = [r["id"] for r in sem_results]

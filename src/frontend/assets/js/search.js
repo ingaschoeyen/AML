@@ -97,8 +97,22 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function createPreviewCard(result) {
+    const pdfUrl = typeof toPdfUrl === "function" ? toPdfUrl(result.source_path) : result.source_path;
+
     let card = document.createElement("div");
     card.className = "result-card";
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", `Preview PDF for ${result.file_name}`);
+    card.addEventListener("click", () => {
+        loadPDF(pdfUrl);
+    });
+    card.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            loadPDF(pdfUrl);
+        }
+    });
     
     let title = document.createElement("h3");
     title.textContent = result.file_name;
@@ -109,16 +123,19 @@ function createPreviewCard(result) {
     card.appendChild(snippet);
     
     let link = document.createElement("a");
-    link.href = result.source_path; // TODO: make this dynamic based on user/session;
-    link.textContent = result.source_path;
+    link.href = pdfUrl; // TODO: make this dynamic based on user/session;
+    link.textContent = pdfUrl;
     link.target = "_blank";
     card.appendChild(link);
 
     let viewButton = document.createElement("button");
     viewButton.className = "view-pdf-button";
     viewButton.textContent = "View PDF";
+    viewButton.addEventListener("click", event => {
+        event.stopPropagation();
+    });
     viewButton.addEventListener("click", () => {
-        loadPDF(result.source_path); // TODO: make this dynamic based on user/session;
+        loadPDF(pdfUrl); // TODO: make this dynamic based on user/session;
     });
     card.appendChild(viewButton);
 

@@ -92,6 +92,66 @@ The frontend consists of
 - the search page at [src/frontend/pages/searchPage.html](./src/frontend/pages/searchPage.html)
 - the pdf viewer page at [src/frontend/pages/pdfViewer.html](./src/frontend/pages/pdfViewer.html)
 
+Running the frontend locally
+----------------------------
+
+1. Install the frontend dependencies (from the repository root):
+
+  ```bash
+  npm --prefix AML/src/frontend install
+  ```
+
+2. Start the frontend Express server (serves pages and PDF assets):
+
+  ```bash
+  npm --prefix AML/src/frontend start
+  ```
+
+  This will run a small Express server on `http://localhost:5500` that serves the frontend pages and the `public/data` PDF assets under `http://localhost:5500/data/...`.
+
+3. Open the search page in your browser:
+
+  - `http://localhost:5500/pages/searchPage.html`
+
+Notes
+-----
+- The backend API runs on port `8000` and is contacted by the frontend at `http://localhost:8000/api/...`.
+- The PDF preview in the search results fetches files from the frontend Express server (port `5500`) so the browser can access local PDF files via HTTP. Make sure the Express server is running when previewing PDFs.
+- If you run a separate file server (e.g., Live Server) on `127.0.0.1:5501`, the backend CORS policy allows common dev origins but using `http://localhost:5500` for the frontend is recommended to match the configured paths.
+
+PDF server and ports
+--------------------
+
+This project uses two local servers during development: the backend FastAPI server (search API) and a small Express server that serves the frontend pages and local PDF assets used for previewing. Below is a quick reference table and example commands to start each service.
+
+| Port | Service | Access / Protocol | Notes / Start command |
+| ---: | :------ | :---------------- | :-------------------- |
+| 5500 | Frontend Express server | http://localhost:5500 (HTTP) | Serves frontend pages and PDF assets under `/data/...`.
+|      | | | Start: `npm --prefix AML/src/frontend start` |
+| 8000 | Backend API (FastAPI / uvicorn) | http://localhost:8000 (HTTP, JSON API) | Provides `/api/search`, `/api/index`, `/api/embeddings` endpoints. Start: `cd AML/src/backend && uvicorn app.main:app --reload --host 127.0.0.1 --port 8000` |
+| 5501 | Optional dev file server (Live Server) | http://127.0.0.1:5501 (HTTP) | Alternative static server you might run from an editor; if used, ensure backend CORS allows this origin. |
+
+Example PDF preview URL (served by the frontend Express server):
+
+```
+http://localhost:5500/data/N326/326023/DOC/326023_IR_2009.pdf
+```
+
+Notes
+-----
+- The frontend previewer constructs absolute URLs to the Express server (port `5500`) when loading PDFs. Always run the Express server if you want to preview files from search results.
+- Backend CORS: the FastAPI app allows common local dev origins (`localhost:5500`, `localhost:5501`, `127.0.0.1:5500`, `127.0.0.1:5501`) so the frontend can call the API from typical dev servers. If you change ports, update the CORS allowlist in `src/backend/app/main.py`.
+- To run everything quickly from the repo root:
+
+```bash
+# start backend (in one terminal)
+cd AML/src/backend
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+
+# start frontend server (in another terminal)
+npm --prefix AML/src/frontend start
+```
+
 
 The search page is structured into 
 - a search bar at the top for query input

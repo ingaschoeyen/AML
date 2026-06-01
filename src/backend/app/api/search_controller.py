@@ -14,6 +14,7 @@ class SearchRequest(BaseModel):
     index_dir: str = "../../results/index"
     mode: str = "hybrid"
     top_k: int = 10
+    embedding_model: str | None = None
     # Road + hectometer filter
     road: str | None = None
     hm: float | None = None
@@ -61,10 +62,10 @@ def search(request: SearchRequest):
     if request.mode == "bm25":
         results = searcher.search_bm25(request.query, top_k=request.top_k, **filters)
     elif request.mode == "semantic":
-        embedding_model = request.embedding_model if hasattr(request, 'embedding_model') else 'clips/e5-small-trm-nl'
+        embedding_model = request.embedding_model or 'clips/e5-small-trm-nl'
         results = searcher.search_semantic(request.query, top_k=request.top_k, embedding_model=embedding_model, **filters)
     else:
-        embedding_model = request.embedding_model if hasattr(request, 'embedding_model') else 'clips/e5-small-trm-nl'
+        embedding_model = request.embedding_model or 'clips/e5-small-trm-nl'
         results = searcher.search_hybrid(request.query, top_k=request.top_k, embedding_model=embedding_model, **filters)
 
     return {
