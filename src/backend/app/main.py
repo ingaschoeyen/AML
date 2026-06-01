@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.models.schemas import IngestionRequest, IngestionResponse
@@ -8,6 +9,7 @@ from app.api.search_controller import router as search_router
 # to run: cd src/backend and then uvicorn app.main:app --reload
 from app.api.index_controller import router as index_router
 from app.search import config
+from app.search.semantic_search_service import Searcher
 from app.processing.text_preprocessing_service import download_nltk_data, get_nlp_model
 
 
@@ -15,6 +17,10 @@ from app.processing.text_preprocessing_service import download_nltk_data, get_nl
 async def lifespan(app: FastAPI):
     download_nltk_data()
     get_nlp_model(config.NER_MODEL)
+    searcher = Searcher(Path(config.INDEX_DIR))
+    searcher._load_embeddings()
+    searcher._load_bge_model()
+    app.state.searcher = searcher
     yield
 
 

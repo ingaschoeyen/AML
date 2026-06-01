@@ -1,9 +1,6 @@
-from pathlib import Path
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from pydantic import BaseModel
-from app.search.semantic_search_service import Searcher
 from app.search.coordinates import geocode_place
-from app.processing.text_preprocessing_service import download_nltk_data
 
 
 router = APIRouter(prefix="/api/search", tags=["Search"])
@@ -11,7 +8,6 @@ router = APIRouter(prefix="/api/search", tags=["Search"])
 
 class SearchRequest(BaseModel):
     query: str
-    index_dir: str = "../../results/index"
     mode: str = "hybrid"
     top_k: int = 10
     # Road + hectometer filter
@@ -31,10 +27,9 @@ class SearchRequest(BaseModel):
 
 
 @router.post("")
-def search(request: SearchRequest):
-    download_nltk_data()
+def search(request: SearchRequest, http_request: Request):
+    searcher = http_request.app.state.searcher
 
-    # Resolve place_name to RD coords when raw coords are not supplied
     place_x, place_y = request.place_x, request.place_y
     if request.place_name and place_x is None:
         resolved = geocode_place(request.place_name)
@@ -54,8 +49,6 @@ def search(request: SearchRequest):
         "year_from": request.year_from,
         "year_to": request.year_to,
     }
-
-    searcher = Searcher(Path(request.index_dir))
 
     if request.mode == "bm25":
         results = searcher.search_bm25(request.query, top_k=request.top_k, **filters)

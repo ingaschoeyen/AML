@@ -37,9 +37,9 @@ def _matches_coord_filter(
         years = doc.get("years", [])
         if not years:
             return False
-        if year_from is not None and max(years) < year_from:
-            return False
-        if year_to is not None and min(years) > year_to:
+        lo = year_from if year_from is not None else 0
+        hi = year_to if year_to is not None else 9999
+        if not any(lo <= y <= hi for y in years):
             return False
 
     coords = doc.get("coordinates", {})
@@ -197,6 +197,30 @@ class Searcher:
     # BM25 search
     # ------------------------------------------------------------------
 
+    def _search_bm25_inner(
+        self,
+        tokens: list[str],
+        top_k: int,
+        road, hm, hm_radius, place_x, place_y, place_radius,
+        file_type, file_name, year_from, year_to,
+    ) -> list[dict]:
+        k = min(top_k, len(self._doc_store))
+        k = max(1, k - 1)
+        results, scores = self._bm25.retrieve([tokens], k=k)
+        output = []
+        for doc_id, s in zip(results[0], scores[0]):
+            if not _matches_coord_filter(self._doc_store[doc_id], road, hm, hm_radius, place_x, place_y, place_radius, file_type, file_name, year_from, year_to):
+                continue
+            output.append({
+                **self._doc_store[doc_id],
+                "rank": len(output) + 1,
+                "score": round(float(s), 6),
+                "snippets": self._extract_snippets(doc_id, tokens),
+            })
+            if len(output) >= top_k:
+                break
+        return output
+
     def search_bm25(
         self,
         query: str,
@@ -214,36 +238,42 @@ class Searcher:
     ) -> list[dict]:
         if self._bm25 is None or self._corpus_tokens is None:
             raise ValueError("BM25 index is not available. Build BM25 index first or use mode='semantic'.")
-
         tokens = process_text(query, config.NER_MODEL, config.NER_BOOST_TYPES, config.NER_BOOST_FACTOR)
         if not tokens:
             return []
+        return self._search_bm25_inner(tokens, top_k, road, hm, hm_radius, place_x, place_y, place_radius, file_type, file_name, year_from, year_to)
 
-        k = min(top_k, len(self._doc_store))
-        k = max(1, k - 1)
+    # ------------------------------------------------------------------
+    # Semantic search
+    # ------------------------------------------------------------------
 
-        results, scores = self._bm25.retrieve([tokens], k=k)
-
-        doc_ids = list(results[0])
-        raw_scores = list(scores[0])
-
+    def _search_semantic_inner(
+        self,
+        query_vec: np.ndarray,
+        tokens: list[str],
+        top_k: int,
+        road, hm, hm_radius, place_x, place_y, place_radius,
+        file_type, file_name, year_from, year_to,
+    ) -> list[dict]:
+        embeddings = self._load_embeddings()
+        if embeddings.shape[1] != query_vec.shape[0]:
+            raise ValueError(f"Dimension mismatch: docs={embeddings.shape[1]}, query={query_vec.shape[0]}")
+        sims = _cosine_similarity(query_vec, embeddings)
+        ranked_indices = np.argsort(sims)[::-1]
         output = []
-        for doc_id, s in zip(doc_ids, raw_scores):
+        for idx in ranked_indices:
+            doc_id = int(idx)
             if not _matches_coord_filter(self._doc_store[doc_id], road, hm, hm_radius, place_x, place_y, place_radius, file_type, file_name, year_from, year_to):
                 continue
             output.append({
                 **self._doc_store[doc_id],
                 "rank": len(output) + 1,
-                "score": round(float(s), 6),
+                "score": round(float(sims[idx]), 6),
                 "snippets": self._extract_snippets(doc_id, tokens),
             })
             if len(output) >= top_k:
                 break
         return output
-
-    # ------------------------------------------------------------------
-    # Semantic search
-    # ------------------------------------------------------------------
 
     def search_semantic(
         self,
@@ -261,35 +291,11 @@ class Searcher:
         year_to: int | None = None,
     ) -> list[dict]:
         model = self._load_bge_model()
-        embeddings = self._load_embeddings()
-
+        tokens = process_text(query, config.NER_MODEL, config.NER_BOOST_TYPES, config.NER_BOOST_FACTOR)
         query_vec: np.ndarray = model.encode(
             [query], batch_size=1, normalize_embeddings=True, convert_to_numpy=True
         )[0].astype(np.float32)
-
-        if embeddings.shape[1] != query_vec.shape[0]:
-            raise ValueError(
-                f"Dimension mismatch: docs={embeddings.shape[1]}, query={query_vec.shape[0]}"
-            )
-
-        sims = _cosine_similarity(query_vec, embeddings)
-        ranked_indices = np.argsort(sims)[::-1]
-
-        query_terms = process_text(query, config.NER_MODEL, config.NER_BOOST_TYPES, config.NER_BOOST_FACTOR)
-        output = []
-        for idx in ranked_indices:
-            doc_id = int(idx)
-            if not _matches_coord_filter(self._doc_store[doc_id], road, hm, hm_radius, place_x, place_y, place_radius, file_type, file_name, year_from, year_to):
-                continue
-            output.append({
-                **self._doc_store[doc_id],
-                "rank": len(output) + 1,
-                "score": round(float(sims[idx]), 6),
-                "snippets": self._extract_snippets(doc_id, query_terms),
-            })
-            if len(output) >= top_k:
-                break
-        return output
+        return self._search_semantic_inner(query_vec, tokens, top_k, road, hm, hm_radius, place_x, place_y, place_radius, file_type, file_name, year_from, year_to)
 
     # ------------------------------------------------------------------
     # Hybrid search (BM25 + semantic, fused via RRF)
@@ -310,39 +316,44 @@ class Searcher:
         year_from: int | None = None,
         year_to: int | None = None,
     ) -> list[dict]:
-        
         if self._bm25 is None:
             raise ValueError("Hybrid search requires BM25 index. Use mode='semantic' for now.")
 
-        # Retrieve a broader candidate pool before fusion
+        # Compute tokens and query vector once for both retrieval paths
+        tokens = process_text(query, config.NER_MODEL, config.NER_BOOST_TYPES, config.NER_BOOST_FACTOR)
+        model = self._load_bge_model()
+        query_vec: np.ndarray = model.encode(
+            [query], batch_size=1, normalize_embeddings=True, convert_to_numpy=True
+        )[0].astype(np.float32)
+
         pool = min(top_k * 5, len(self._doc_store))
 
-        bm25_results = self.search_bm25(query,    top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius, file_type=file_type, file_name=file_name, year_from=year_from, year_to=year_to)
-        sem_results  = self.search_semantic(query, top_k=pool, road=road, hm=hm, hm_radius=hm_radius, place_x=place_x, place_y=place_y, place_radius=place_radius, file_type=file_type, file_name=file_name, year_from=year_from, year_to=year_to)
+        bm25_results = self._search_bm25_inner(tokens, pool, road, hm, hm_radius, place_x, place_y, place_radius, file_type, file_name, year_from, year_to)
+        sem_results  = self._search_semantic_inner(query_vec, tokens, pool, road, hm, hm_radius, place_x, place_y, place_radius, file_type, file_name, year_from, year_to)
 
         bm25_ids = [r["id"] for r in bm25_results]
         sem_ids  = [r["id"] for r in sem_results]
 
         fused_ids = rrf_fuse([bm25_ids, sem_ids])[:top_k]
 
-        # Build score lookup for reporting
         bm25_score = {r["id"]: r["score"] for r in bm25_results}
         sem_score  = {r["id"]: r["score"] for r in sem_results}
+        bm25_rank  = {doc_id: i for i, doc_id in enumerate(bm25_ids)}
+        sem_rank   = {doc_id: i for i, doc_id in enumerate(sem_ids)}
 
-        query_terms = process_text(query, config.NER_MODEL, config.NER_BOOST_TYPES, config.NER_BOOST_FACTOR)
+        rrf_k = config.RRF_K
         output = []
         for doc_id in fused_ids:
             entry = dict(self._doc_store[doc_id])
-            entry["rank"]        = len(output) + 1
-            entry["score_bm25"]  = round(bm25_score.get(doc_id, 0.0), 6)
-            entry["score_sem"]   = round(sem_score.get(doc_id,  0.0), 6)
-            rrf_k = config.RRF_K
-            rrf_score = (
-                (1.0 / (rrf_k + bm25_ids.index(doc_id) + 1) if doc_id in bm25_ids else 0.0)
-                + (1.0 / (rrf_k + sem_ids.index(doc_id)  + 1) if doc_id in sem_ids  else 0.0)
+            entry["rank"]       = len(output) + 1
+            entry["score_bm25"] = round(bm25_score.get(doc_id, 0.0), 6)
+            entry["score_sem"]  = round(sem_score.get(doc_id, 0.0), 6)
+            entry["score"]      = round(
+                (1.0 / (rrf_k + bm25_rank[doc_id] + 1) if doc_id in bm25_rank else 0.0)
+                + (1.0 / (rrf_k + sem_rank[doc_id] + 1) if doc_id in sem_rank else 0.0),
+                8,
             )
-            entry["score"]    = round(rrf_score, 8)
-            entry["snippets"] = self._extract_snippets(doc_id, query_terms)
+            entry["snippets"] = self._extract_snippets(doc_id, tokens)
             output.append(entry)
 
-        return output[:top_k]
+        return output
