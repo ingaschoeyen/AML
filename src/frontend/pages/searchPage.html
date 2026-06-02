@@ -92,7 +92,12 @@
                     </div>
                     <div class="filter-group">
                         <label>Road</label>
-                        <input type="text" id="road" placeholder="Road name or number">
+                        <input type="text" id="road" placeholder="Road name or number" list="road-suggestions">
+                        <datalist id="road-suggestions">
+                            <option value="N301">
+                            <option value="N326">
+                            <option value="N338">
+                        </datalist>
                         <input type="number" id="hm" placeholder="Point on road (HM)">
                         <input type="number" id="hm-radius" placeholder="Road search radius (HM)">
                     </div>
