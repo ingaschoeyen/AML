@@ -46,9 +46,9 @@ def _matches_coord_filter(
         years = doc.get("years", [])
         if not years:
             return False
-        if year_from is not None and max(years) < year_from:
-            return False
-        if year_to is not None and min(years) > year_to:
+        lo = year_from if year_from is not None else 0
+        hi = year_to if year_to is not None else 9999
+        if not any(lo <= y <= hi for y in years):
             return False
 
     coords = doc.get("coordinates", {})
