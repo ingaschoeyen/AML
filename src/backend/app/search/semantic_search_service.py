@@ -139,6 +139,7 @@ class Searcher:
         self._embeddings: np.ndarray | None = None
         self._bge_model = None
         self._e5_model = None
+        self._cur_e5_model_name = None
 
     # ------------------------------------------------------------------
     # Internal loaders
@@ -171,13 +172,14 @@ class Searcher:
             self._bge_model = SentenceTransformer(config.BGE_MODEL_NAME, device=device)
         return self._bge_model
 
-    def _load_e5_model(self):
-        if self._e5_model is None:
+    def _load_e5_model(self, embedding_model: str = 'clips/e5-small-trm-nl'):
+        if self._e5_model is None or self._cur_e5_model_name != embedding_model:
             print("Loading E5 model for query encoding ...", file=sys.stderr)
             from sentence_transformers import SentenceTransformer
             import torch
             device = "cuda" if torch.cuda.is_available() else "cpu"
-            self._e5_model = SentenceTransformer(config.E5_MODEL_NAME, device=device)
+            self._e5_model = SentenceTransformer(embedding_model, device=device)
+            self._cur_e5_model_name = embedding_model
         return self._e5_model
 
 
@@ -294,7 +296,7 @@ class Searcher:
         year_from: int | None = None,
         year_to: int | None = None,
     ) -> list[dict]:
-        model = self._load_bge_model() if embedding_model == 'BAAI/bge-m3' else self._load_e5_model()
+        model = self._load_bge_model() if embedding_model == 'BAAI/bge-m3' else self._load_e5_model(embedding_model)
         embeddings = self._load_embeddings(embedding_model)
 
         query_vec: np.ndarray = model.encode(

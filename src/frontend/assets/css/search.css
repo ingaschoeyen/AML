@@ -28,9 +28,11 @@ body {
     box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
 }
 
+.search-container input[type="search"],
 .search-container input[type="text"] {
     flex: 1;
     min-width: 0;
+    width: 100%;
     padding: 12px 14px;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
@@ -41,7 +43,6 @@ body {
     outline: none;
     box-shadow: 0 0 0 3px rgba(31, 79, 130, 0.12);
     border-color: #1f4f82;
-    width: 400px;
 }
 .search-container input[type="text"]:focus {
     outline: none;
