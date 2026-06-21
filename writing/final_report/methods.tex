@@ -1,1 +1,34 @@
 \section{Methodology}
+
+\subsection{Ingestion Pipeline}
+The whole functionality of the app is integrated into large ingestion pipeline that connects different components of the search engine. Overview of the pipeline is presented below:
+\begin{enumerate}
+    \item \textbf{Document Repository} -- Source folder containing all documents to be processed and searched (e.g., engineering documents and images).
+    \item \textbf{File Discovery} -- Automatically locates supported files and collects metadata (e.g., \texttt{.docx}, \texttt{.pdf}, etc.).
+    \item \textbf{Inventory Comparison} -- Compares the current repository state with a previously stored inventory from the previous run.
+    \item \textbf{Change Detection (New / Modified Files)} -- Selects only new or modified files for further processing.
+    \item \textbf{Content Extraction (Direct Text + OCR)} -- Extracts text through direct parsing or OCR when necessary.
+    \item \textbf{Text Storage (\texttt{page\_extraction.csv})} -- Saves extracted page-level text in a structured CSV dataset.
+    \item \textbf{Semantic Embedding} -- Encodes text into numerical vectors that capture semantic meaning.
+    \item \textbf{Index Construction} -- Organizes document data and embeddings into a searchable index.
+    \item \textbf{Search System} -- Retrieves relevant documents using semantic and keyword-based search.
+\end{enumerate}
+
+The process starts with scanning the document repository and creating an up-to-date list of all the supported files. This list is compared with the previously saved list based on file paths, file size and modification dates. Files are categorized as:
+\begin{itemize}
+    \item New files
+    \item Modified files
+    \item Deleted files
+    \item Unchanged files
+\end{itemize}
+
+New and modified files only are passed to the extraction stage. This approach helps to save processing time at further execution stages since unmodified documents do not have to be processed. After the extraction stage, the entire text of the pages is saved in a structure format (.csv file). Then the text is passed to the next component – semantic embedding, where documents are embedded with the help of transformer-based language models.
+
+Finally, the generated embeddings and metadata are passed on to the indexing step, where the searchable data structures are built. Consequently, the whole process chain is fully automated from document extraction to a searchable semantic index.
+
+It is important to mention that the pipeline was designed as a modular processing architecture rather than a strictly sequential workflow. While the full pipeline can be run automatically using one ingestion endpoint, each of its steps can be accessed individually as a service. Therefore, document extraction, embeddings creation, indexing and search can be initiated independently whenever necessary. Such an approach allows more flexibility during development and experiments since any of the steps can be re-executed without running the whole pipeline again. For instance, researchers can create new embeddings based on already extracted text or build a new search index without running the expensive OCR step once again.
+
+
+\subsection{OCR and Content Extraction}
+This pipeline was developed to facilitate automatic extraction of text information from a set of engineering documents. Since the dataset contained different file formats and varying document quality, a hybrid extraction strategy was implemented. Initially, the pipeline recursively explores the files in the provided root directory folder. The supported formats of the files include PDF documents, Microsoft Word documents (.docx) and pictures (e.g. .jpeg, .png, .bmp and .tiff). In this stage, metadata information about the file including the file path, its size and timestamp are extracted and stored in the inventory file. For PDF files, however, a two-step text extraction technique is applied. The system will try to extract text directly from the file using the library PyMuPDF. This method is very fast since text extraction does not require any image processing for digitally created PDF files. However, many historical engineering documents are created by scanning the text and putting it in a PDF format. In this case, text extraction provides no results. For this reason, if there is no text on a page or the amount of text does not meet the predefined threshold (50 characters extracted), the page is converted to an image and the text is extracted with the help of Tesseract OCR.
+This solution is a combination of the efficiency of the direct extraction of text with the durability of OCR in the case of scanned images. Consequently, documents that have been created digitally or those that have been scanned will all be processed through one consistent process. The scanned files will always go through OCR since there is no text layer present. On the other hand, Microsoft Word (.docx) files will be processed through the direct extraction of paragraphs.

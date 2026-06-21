@@ -1,0 +1,30 @@
+\section{Discussion}
+
+\subsection{Summary of Contributions}
+\subsubsection{OCR}
+This work proposed a complete framework for document ingestion and extraction which enables conversion of diverse engineering documents to machine-readable text format. Main contributions include:
+\begin{itemize}
+    \item Automated discovery and management of the document corpus.
+    \item Incremental change detection across processing runs.
+    \item Hybrid content extraction using direct PDF text extraction and OCR technologies.
+    \item Support for multiple document formats, including PDF, scanned PDF, Microsoft Word documents, and image files.
+    \item Integration of extracted document content with the semantic embedding and indexing components.
+\end{itemize}
+
+These elements form a powerful platform for semantic document retrieval.
+
+\subsection{Limatations}
+\subsubsection{OCR}
+There are several limitations in the current approach. Firstly, the effectiveness of OCR is directly dependent on the quality of the documents. Documents which are not of good quality can cause errors during the process of recognition, which can affect further steps of the retrieval process.
+Secondly, another limitation of the current pipeline is the performance of the OCR component on handwritten documents. The selected OCR engine, Tesseract OCR, performs good on printed and scanned text but has reduced accuracy when processing handwritten notes. 
+Thirdly, during development an alternative deep learning-based OCR 	approach was tested and evaluated in an attempt to improve recognition performance on more challenging documents. While the deep learning model (i.e. PaddleOCR) demonstrated some potential advantages in handling complex layouts and handwriting, the observed improvement in extraction quality was limited for the project dataset. At the same time, the computational time increased significantly, with processing times being several times longer than those of the selected Tesseract-based solution. Considering the relatively modest improvements in terms of accuracy as well as the much higher costs associated with computations, the conventional OCR system was chosen as the best compromise between the quality of extraction and speed of computation. Nonetheless, developments in deep learning-based OCR technology may render such approaches preferable in the future.
+Additionally, legacy Microsoft Word (.doc) files are not supported by the current solution and hence cannot be processed automatically.
+Finally, the existing extraction pipeline does not process diagrams or similar types of data. While images containing text can be processed through OCR, purely visual images without textual content do not generate any extractable text. Therefore, these images would not be processed in the later steps of the pipeline, like semantic embedding generation and indexing of documents.
+
+
+\subsection{Future Directions and Recommendations}
+\subsubsection{OCR}
+A number of possibilities can be done for improving the document ingestion that has been suggested in this project.
+Firstly, future improvements can further research better OCR techniques, which can improve the quality of extracted data from documents with handwritten notes or technical schemas. Even though it was experimented with deep learning OCR solutions during development, they did not result into substantial improvement in accuracy compared to their much greater computational expenses.
+Secondly, the current pipeline can be further developed by introducing multimodal document processing functionality. Currently, the pipeline is more generic and focused on retrieving text data from simple images or directly from the document. As a result, it struggles with large scanned technical documents that contain measurements, diagrams and complex layouts. Future development could look into dedicated processing pipelines for such documents, where document type detection is first performed and specialized extraction methods are subsequently applied. This would allow important information contained in visual and structural elements to be preserved and better extracted into the retrieval process. Additionally, support for other documents might need to be implemented if there are more old files with unsupported file types (e.g. .doc).
+Thirdly, before OCR is applied, scanned pages could be enhanced through deskewing, denoising, contrast adjustment and resolution normalization. Furthermore, OCR confidence scores can be implemented flagging low-quality extractions to be manually checked or processed by more advanced techniques. Finally, rather than implementing a complete replacement for the existing OCR engine, future improvements can build upon it and could introduce selective strategy where Tesseract can be still used by default and specialized approaches can be used for the technical drawings or handwritten notes.

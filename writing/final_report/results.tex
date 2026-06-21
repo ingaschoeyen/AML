@@ -1,0 +1,21 @@
+\section{Results}
+
+\subsection{OCR}
+\subsubsection{Content Extraction Results}
+In fact, the suggested extraction pipeline has been capable of handling documents that have been created in various formats such as PDF, scanned PDF, images and Microsoft Word documents. In this regard, it is important to mention the fact that the hybrid approach has turned out to be efficient as it has chosen the most appropriate approach for the extraction process. For instance, digitally generated PDFs have been extracted by means of the direct text extraction whereas scanned documents have been processed with the use of OCR. It has allowed the system to handle a wide range of documents without any manual interference.
+
+
+\subsubsection{Storage Requirements}
+The extract phase produces a number of intermediate products, which are needed by other phases of the pipeline. They are:
+\begin{itemize}
+    \item Inventory metadata (\texttt{inventory.csv})
+    \item Page-level extracted text (\texttt{page\_extraction.csv})
+    \item Document embeddings (\texttt{embeddings.pkl})
+    \item Search index files
+    \item Document metadata store (\texttt{doc\_store.json})
+\end{itemize}
+
+The largest storage consumers are typically the extracted text repository and the embedding vectors. However, storing extracted text separately enables re-indexing and experimentation with different retrieval methods without repeating the expensive OCR process.
+
+\subsubsection{Energy and Computational Considerations}
+The direct text extraction process from the digitized PDF documents has a relatively small computational cost since there is no need for any kind of image processing to extract text from the document. OCR processing, on the other hand, has a significantly higher cost associated with the process since there is a need to create an image for each page and analyse it using the OCR engine. The hybrid extraction algorithm is designed to avoid unnecessary OCR processing whenever possible. Moreover, the incremental ingestion process helps save computing resources since all the unchanged documents are ignored during re-execution of the processing pipeline.
