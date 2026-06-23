@@ -30,5 +30,46 @@ It is important to mention that the pipeline was designed as a modular processin
 
 
 \subsection{OCR and Content Extraction}
-This pipeline was developed to facilitate automatic extraction of text information from a set of engineering documents. Since the dataset contained different file formats and varying document quality, a hybrid extraction strategy was implemented. Initially, the pipeline recursively explores the files in the provided root directory folder. The supported formats of the files include PDF documents, Microsoft Word documents (.docx) and pictures (e.g. .jpeg, .png, .bmp and .tiff). In this stage, metadata information about the file including the file path, its size and timestamp are extracted and stored in the inventory file. For PDF files, however, a two-step text extraction technique is applied. The system will try to extract text directly from the file using the library PyMuPDF. This method is very fast since text extraction does not require any image processing for digitally created PDF files. However, many historical engineering documents are created by scanning the text and putting it in a PDF format. In this case, text extraction provides no results. For this reason, if there is no text on a page or the amount of text does not meet the predefined threshold (50 characters extracted), the page is converted to an image and the text is extracted with the help of Tesseract OCR.
-This solution is a combination of the efficiency of the direct extraction of text with the durability of OCR in the case of scanned images. Consequently, documents that have been created digitally or those that have been scanned will all be processed through one consistent process. The scanned files will always go through OCR since there is no text layer present. On the other hand, Microsoft Word (.docx) files will be processed through the direct extraction of paragraphs.
+This pipeline was developed to facilitate automatic extraction of text information from a set of engineering documents. 
+Since the dataset contained different file formats and varying document quality, a hybrid extraction strategy was implemented. 
+Initially, the pipeline recursively explores the files in the provided root directory folder. 
+The supported formats of the files include PDF documents, Microsoft Word documents (.docx) and pictures (e.g. .jpeg, .png, .bmp and .tiff). 
+In this stage, metadata information about the file including the file path, its size and timestamp are extracted and stored in the inventory file. 
+For PDF files, however, a two-step text extraction technique is applied. 
+The system will try to extract text directly from the file using the library PyMuPDF. 
+This method is very fast since text extraction does not require any image processing for digitally created PDF files. 
+However, many historical engineering documents are created by scanning the text and putting it in a PDF format. 
+In this case, text extraction provides no results. 
+For this reason, if there is no text on a page or the amount of text does not meet the predefined threshold (50 characters extracted), the page is converted to an image and the text is extracted with the help of Tesseract OCR.
+This solution is a combination of the efficiency of the direct extraction of text with the durability of OCR in the case of scanned images. 
+Consequently, documents that have been created digitally or those that have been scanned will all be processed through one consistent process. 
+The scanned files will always go through OCR since there is no text layer present. 
+On the other hand, Microsoft Word (.docx) files will be processed through the direct extraction of paragraphs.
+
+\subsection{Semantic Embedding}
+
+The semantic embedding pipeline ingests the extracted text and creates semantic embeddings of the text per asset. 
+We selected two families of open-source LLMs that are trained on retrieval tasks for the embedding generation, namely \texttt{bge-m3} by BAAI \cite{chen2024bge}, a multilingual and multi-functionality embedding model, and \texttt{e5-nl} by clips \cite{banar2025mteb}, a dutch-language and multi-functionality embedding model.
+For both model types, different-size model pretrained weights are published open-access on the Hugging Face Hub and can be locally instantiated through common LLM APIs.
+We use \texttt{SemanticTransformer} from the \texttt{sentence_transformers} package \cite{reimers-2019-sentence-bert}, which enables loading of the models, creating semantic embeddings, and computing the similarity of different embeddings.
+Embeddings were created for the entire dataset and stored locally as pickle files.
+
+While the raw text output of the OCR component was used to create embeddings that captured the information of the entire document as a baseline, we also explored chunking as a means to create embeddings for smaller sections of the extracted text, e.g. paragraphs or sentences. 
+It has recently been shown that chunking can improve retrieval efficiency for specific ... while it reduces efficiency for \cite{zhouChunkThenEmbedComprehensiveTaxonomy2026}
+Further, ... showed that merging semantic embeddings of chunks to generate full document embeddings can ..., improving the ... 
+However, \textcite{jaiswalComparisonChunkingTechniques2025} showed that while fine-grained chunking can improve perfomance it also results in a significant computational overhead.
+We evaluate the effect of chunking to generate small-segment embeddings and merged full-document embeddings both in terms of the encoding effectiveness, using the cross-document similarity of embeddings as a metric, and the retrieval efficiency, quantified by the difference in retrieval time and accuracy between chunked and non-chunked embeddings.
+
+Another use of LLMs that we considered was prompt engineering, which is a new strategy for retrieval that came to be with the introduction of LLMs to the field.
+Namely, following the example of \texttt{BitAndBeam}, we constructed nested categories of document descriptions that can be passed to the LLM along with a prompt to assign the category label to the documents it ingests.
+These labels can then serve both as metadata for filters from frontend as well as additional keywords for the classical retrieval engine.
+
+
+Lastly, we considered using a semantic embedding approach to generate searchable data for the visual assets
+namely, folllowing ... , images can first be passed through a vision model that generates semantic embeddings, which are then passed through the LLM to generate a desired output.
+For this application, such image semantic embeddings could be used both to generate an image description that can be used for the retreival algorithm, or to generate labels that can be used for filters, as outlined above.
+We also consulted the work of \cite{gobels2024towards}, who
+
+
+
+
