@@ -1,4 +1,5 @@
 \section{Methodology}
+\label{sec:methods}
 
 \subsection{Ingestion Pipeline}
 The whole functionality of the app is integrated into large ingestion pipeline that connects different components of the search engine. Overview of the pipeline is presented below:
@@ -49,26 +50,34 @@ On the other hand, Microsoft Word (.docx) files will be processed through the di
 \subsection{Semantic Embedding}
 
 The semantic embedding pipeline ingests the extracted text and creates semantic embeddings of the text per asset. 
-We selected two families of open-source LLMs that are trained on retrieval tasks for the embedding generation, namely \texttt{bge-m3} by BAAI \cite{chen2024bge}, a multilingual and multi-functionality embedding model, and \texttt{e5-nl} by clips \cite{banar2025mteb}, a dutch-language and multi-functionality embedding model.
+A semantic search engine can then compute the similarity of the embeddings with the embedding of the query to retrieve documents with similar semantic content to the query.
+
+
+\paragraph{Embedding Models} We selected two families of open-source LLMs that are trained on retrieval tasks for the embedding generation, namely \texttt{bge-m3} by BAAI \cite{chen2024bge}, a multilingual and multi-functionality embedding model, and \texttt{e5-nl} by clips \cite{banar2025mteb}, a dutch-language and multi-functionality embedding model.
 For both model types, different-size model pretrained weights are published open-access on the Hugging Face Hub and can be locally instantiated through common LLM APIs.
 We use \texttt{SemanticTransformer} from the \texttt{sentence_transformers} package \cite{reimers-2019-sentence-bert}, which enables loading of the models, creating semantic embeddings, and computing the similarity of different embeddings.
 Embeddings were created for the entire dataset and stored locally as pickle files.
 
-While the raw text output of the OCR component was used to create embeddings that captured the information of the entire document as a baseline, we also explored chunking as a means to create embeddings for smaller sections of the extracted text, e.g. paragraphs or sentences. 
+\paragraph{Chunking} While the raw text output of the OCR component was used to create embeddings that captured the information of the entire document as a baseline, we also explored chunking as a means to create embeddings for smaller sections of the extracted text, e.g. paragraphs or sentences. 
 It has recently been shown that chunking can improve retrieval efficiency for specific ... while it reduces efficiency for \cite{zhouChunkThenEmbedComprehensiveTaxonomy2026}
 Further, ... showed that merging semantic embeddings of chunks to generate full document embeddings can ..., improving the ... 
 However, \textcite{jaiswalComparisonChunkingTechniques2025} showed that while fine-grained chunking can improve perfomance it also results in a significant computational overhead.
 We evaluate the effect of chunking to generate small-segment embeddings and merged full-document embeddings both in terms of the encoding effectiveness, using the cross-document similarity of embeddings as a metric, and the retrieval efficiency, quantified by the difference in retrieval time and accuracy between chunked and non-chunked embeddings.
+We use the similarity matrix, i.e. the similarity of all embeddings with each other, and the distribution of these similarities for in-model comparison and the difference in similarity matrices for across-model comparison.
+These metrics illustrate the spread of similarities of the embeddings, which gives an indication of how distinguishable and thus specifiable documents are based on the semantic embeddings.
+If all files share similar embeddings, then the similarity of the query to a document is less useful in recovering relevant files, since the semantic search ranks files based on this similarity.
 
-Another use of LLMs that we considered was prompt engineering, which is a new strategy for retrieval that came to be with the introduction of LLMs to the field.
-Namely, following the example of \texttt{BitAndBeam}, we constructed nested categories of document descriptions that can be passed to the LLM along with a prompt to assign the category label to the documents it ingests.
-These labels can then serve both as metadata for filters from frontend as well as additional keywords for the classical retrieval engine.
+% \paragraph{Prompt Engineering} Another use of LLMs that we considered was prompt engineering, which is a new strategy for retrieval that came to be with the introduction of LLMs to the field.
+% That is to say, in addition to using LLMs to compute the similarity in semantic information between a search query and the files, LLMs can perform additional tasks, such as labelling, through providing engineered prompts along with the text or semantic embeddings.
+% We explored this technique for unsupervised labelling of the data.
+% Namely, following the example of \texttt{BitAndBeam} \cite{BitAndBeam}, we constructed nested categories of document descriptions that can be passed to the LLM along with a prompt to assign the category label to the documents it ingests.
+% These labels can then serve both as metadata for filters from frontend as well as additional keywords for the classical retrieval engine.
 
 
-Lastly, we considered using a semantic embedding approach to generate searchable data for the visual assets
-namely, folllowing ... , images can first be passed through a vision model that generates semantic embeddings, which are then passed through the LLM to generate a desired output.
+\paragraph{Visual-to-Semantic Embedding} Lastly, we considered using a semantic embedding approach to generate searchable data for the visual assets.
+Namely, following ... , images can first be passed through a vision model that generates semantic embeddings, which are then passed through the LLM to generate a desired output.
 For this application, such image semantic embeddings could be used both to generate an image description that can be used for the retreival algorithm, or to generate labels that can be used for filters, as outlined above.
-We also consulted the work of \cite{gobels2024towards}, who
+We also consulted the work of \cite{gobels2024towards}, who 
 
 \subsection{Keyword Search}
 In information retrieval, keyword search is still a very important component of search systems. For engineering document retrieval specifically, it is even more important. Engineering files often contain very specific terms and identifiers such as certain jargon, road identifiers (e.g.\ "N338", "A12"), project numbers, and order numbers. These identifiers do not contain any semantic/linguistic information. Semantic embedding models would probably place all of these terms relatively close together, which would be counter-productive, as they have to be separated to be effective within search. Searching for one road specifically and getting results for another is exactly what we don't want. Still, semantic models have their place, but not within this exact term-matching task. This is the reason that keyword search is still valuable nowadays, you still need this matching task, which semantic models struggle with.

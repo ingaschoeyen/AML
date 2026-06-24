@@ -1,5 +1,5 @@
 \section{Results}
-
+\label{sec:results}
 The codebase for the proof-of-concept of the product is available on \hyperlink{github}{https://github.com/ingaschoeyen/AML/tree/main}\footnote{link leads to https://github.com/ingaschoeyen/AML}.
 The source code is stored under \texttt{src/backend} while a simple frontend webUI is available under \texttt{src/frontend} to enable live demonstrations.
 Below, we outline the performance of the different components of the pipeline, with respect to the metrics outlined in the methods section.
@@ -37,27 +37,15 @@ OCR processing, on the other hand, has a significantly higher cost associated wi
 The hybrid extraction algorithm is designed to avoid unnecessary OCR processing whenever possible. 
 Moreover, the incremental ingestion process helps save computing resources since all the unchanged documents are ignored during re-execution of the processing pipeline.
 
-\paragraph{Embedding}
+\subsection{Semantic Embedding}
 
 
 
-\begin{table}[h!]
-    \centering
-    \begin{tabular}{l|c |c}
-        model & Time & Size \\
-        bge-m3 & 68mins 30s\\
-        e5-nl-small & 9mins 24s\\
-        e5-nl-base & 23mins 50s \\
-        e5-nl-large & 58mins 32s\\
-    \end{tabular}
-    \caption{Metrics for the creation of embeddings for each tested embedding model. From left to right, time required to create the embeddings for the whole dataset, size of the embeddings, and the similarity of the embeddings (mean, std) are given.}
-    \label{tab:embeddings_metrics}
+\subsubsection{Chunking}
 
-\end{table}
+To evaluate whether chunking the text results in an improved embedding we compared the different segmentation levels against each other.
 
-To evaluate whether chunking the text results in an improvement we compared the different segmentation levels against each other.
-compared the distribution of similarities within models
-compared distribution of dissimilarities across models, as the difference of similarity matrices
+
 
 \begin{figure}
     \begin{subfigure}{b}
@@ -80,9 +68,28 @@ compared distribution of dissimilarities across models, as the difference of sim
     \end{subfigure}
 \end{figure}
 
+Based on our analysis of the different chunking strategies, we settled on computing file embeddings as the averaged embeddings of the pages within the file.
+With this strategy, we recorded the total time to create the embeddings for each embedding model, along with the resulting size of the embeddings, presented in \autoref{tab:embedding_metrics}.
+As expected, the quickest ingestion time was achieved with the \texttt{e5-nl-small-trm} model, while the longest times were recorded for the \texttt{bge-m3} and \texttt{e5-nl-large-trm} models.
+The size of the embeddings followed the same trend.
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{l|c |c | c| c}
+        model & No. Params & Dim Embedding & Time (min.s) & Size (mb) \\
+        bge-m3 & & & 68.30 & 44\\
+        e5-nl-small-trm & & & 9.24 & 16.7\\
+        e5-nl-base-trm & & & 23.50 & 33.1 \\
+        e5-nl-large-trm & & & 58.32 & 44 \\
+    \end{tabular}
+    \caption{Metrics for the creation of embeddings for each tested embedding model. From left to right, time required to create the embeddings for the whole dataset, size of the embeddings, and the similarity of the embeddings (mean, std) are given.}
+    \label{tab:embeddings_metrics}
+\end{table}
 
 
-\paragraph{Retrieval}
+\subsubsection{Energy and Computational Cost}
+
+\subsection{Retrieval}
 
 
 
