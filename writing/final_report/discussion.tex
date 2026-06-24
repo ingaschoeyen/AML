@@ -21,6 +21,12 @@ Thirdly, during development an alternative deep learning-based OCR 	approach was
 Additionally, legacy Microsoft Word (.doc) files are not supported by the current solution and hence cannot be processed automatically.
 Finally, the existing extraction pipeline does not process diagrams or similar types of data. While images containing text can be processed through OCR, purely visual images without textual content do not generate any extractable text. Therefore, these images would not be processed in the later steps of the pipeline, like semantic embedding generation and indexing of documents.
 
+\subsubsection{Keyword Search}
+Our first limitation for keyword search is caused by noisy OCR extraction. Scanned documents that are passed to the OCR model could possibly contain errors in critical terms or identifiers. A single character being misread means that BM25 will not be able to match these tokens, making the document irretrievable by a query containing that intended token.
+
+Also, indexing at a file level is fine for most files, although you do lose some clarity within the searching process. Some files could be quite large, with tens, if not hundreds, of pages. If this is the case, searching for information in this document is a challenge in itself, as the user knows the document contains information but doesn't know where it appears.
+
+The last limitation was that we didn't have any query-document pairs. Because of this, we could not experiment with tweaking the k1 and b parameters or looking at the effect of the boosting we have done.
 
 \subsection{Future Directions and Recommendations}
 \subsubsection{OCR}
@@ -28,3 +34,10 @@ A number of possibilities can be done for improving the document ingestion that 
 Firstly, future improvements can further research better OCR techniques, which can improve the quality of extracted data from documents with handwritten notes or technical schemas. Even though it was experimented with deep learning OCR solutions during development, they did not result into substantial improvement in accuracy compared to their much greater computational expenses.
 Secondly, the current pipeline can be further developed by introducing multimodal document processing functionality. Currently, the pipeline is more generic and focused on retrieving text data from simple images or directly from the document. As a result, it struggles with large scanned technical documents that contain measurements, diagrams and complex layouts. Future development could look into dedicated processing pipelines for such documents, where document type detection is first performed and specialized extraction methods are subsequently applied. This would allow important information contained in visual and structural elements to be preserved and better extracted into the retrieval process. Additionally, support for other documents might need to be implemented if there are more old files with unsupported file types (e.g. .doc).
 Thirdly, before OCR is applied, scanned pages could be enhanced through deskewing, denoising, contrast adjustment and resolution normalization. Furthermore, OCR confidence scores can be implemented flagging low-quality extractions to be manually checked or processed by more advanced techniques. Finally, rather than implementing a complete replacement for the existing OCR engine, future improvements can build upon it and could introduce selective strategy where Tesseract can be still used by default and specialized approaches can be used for the technical drawings or handwritten notes.
+
+\subsubsection{Keyword Search}
+The keyword search component within the system could be improved in several ways. In addition to indexing at the document level, it would be a good idea to include a page-level index. This reduces the amount of time spent searching in larger documents. 
+
+Another method to apply would be fuzzy matching, which would make the retriever more robust to OCR errors, which is currently the source of worse performance for scanned files. Currently, any OCR error would make the term unmatchable. Fuzzy matching would help alleviate this issue by adding common misspellings or OCR errors to also look for.
+
+For querying specifically, further improvements can be made to NER by including specific terms that users would look for in a document. This way, users will be more likely to find the documents they're looking for. Another improvement would be to add a dictionary of common abbreviations and synonyms. This would prevent missing documents due to mismatches by the original term and abbreviation and also give the retriever more options to look for within documents, given the synonyms.

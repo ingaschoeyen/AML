@@ -70,6 +70,44 @@ namely, folllowing ... , images can first be passed through a vision model that 
 For this application, such image semantic embeddings could be used both to generate an image description that can be used for the retreival algorithm, or to generate labels that can be used for filters, as outlined above.
 We also consulted the work of \cite{gobels2024towards}, who
 
+\subsection{Keyword Search}
+In information retrieval, keyword search is still a very important component of search systems. For engineering document retrieval specifically, it is even more important. Engineering files often contain very specific terms and identifiers such as certain jargon, road identifiers (e.g.\ "N338", "A12"), project numbers, and order numbers. These identifiers do not contain any semantic/linguistic information. Semantic embedding models would probably place all of these terms relatively close together, which would be counter-productive, as they have to be separated to be effective within search. Searching for one road specifically and getting results for another is exactly what we don't want. Still, semantic models have their place, but not within this exact term-matching task. This is the reason that keyword search is still valuable nowadays, you still need this matching task, which semantic models struggle with.
 
+\subsubsection{Text processing}
+
+All text passes through a pre-processing pipeline. This is because we need consistency between the built index and the queries. A token within a document must be the same representation as one in a query. 
+
+For preprocessing, we mainly use spaCy, the Dutch \texttt{nl\_core\_news\_lg} model, to be specific. The most important part of preprocessing for Dutch document search is lemmatisation. Dutch is very morphologically rich and compound-heavy. Without lemmatisation, any change in a word due to being in a different form would not be matched and be seen as a different word entirely. We also remove any punctuation, whitespace and stopwords (for which we use the NLTK corpus). We also lowercase all words. By the end this results in a list of tokens that are within a document or query.
+
+Besides this, we also boost certain terms, mainly ones that contain geopolitical or location information, as determined by the "Named Entity Recognition" (NER) model, for which we also use the spaCy model. These terms are repeated 3 times, both during indexing and querying, to give them more strength while searching.
+
+Token repetition is also used to boost certain metadata fields: \textit{besteksnummer} and \textit{ordernummer} tokens are repeated $\times 3$, \textit{Onderdeel} and \textit{project} tokens $\times 2$, and body text tokens appear once. These terms aren't boosted at query time but do increase the scoring during search.
+
+\subsubsection{Index Building}
+
+The index for keyword search is built using BM25 \textbf{Citation Needed}. BM25 is a function to match documents with a given query. BM25 scores documents as:
+
+\begin{equation}
+    \text{score}(D, Q) = \sum_{i=1}^{n} \text{IDF}(q_i) \cdot \frac{f(q_i, D) \cdot (k_1 + 1)}{f(q_i, D) + k_1 \cdot \left(1 - b + b \cdot \frac{|D|}{\text{avgdl}}\right)}
+\end{equation}
+
+\noindent where $f(q_i, D)$ is the term frequency of $q_i$ in $D$, $|D|$ is the document length, $\text{avgdl}$ is the average document length in the corpus, and $k_1$ and $b$ are free parameters controlling term frequency saturation and length normalisation, respectively. BM25 is implemented via the \texttt{bm25s} Python library.
+
+Indexing happens at the file level. For each document, the preprocessed tokens of the filename are also added to the list so terms within a filename can also be matched, even if they don't appear in the document's text.
+
+\subsubsection{Filtering}
+Besides text-based ranking, our search system also supports metadata filters that are applied post-retrieval. Any documents that do not satisfy the filters are excluded in the results. Metadata collection is done during inference building for each document and stored in \texttt{doc\_store.json}.
+
+\paragraph{Road and Hectometer Filters.}
+The engineering documents oftentimes featured the corresponding road and hectometer markers to indicate the location of the structure. The system extracts this information using regular expressions (regex) that recognise Dutch road codes together with the hectometer expressions in different known formats. At query time, the user can specify the road name, hectometer expression and a radius (default: $1.0$). 
+
+\paragraph{Coordinate Filters.}
+The coordinate system used within many project files is "Rijksdriehoek" or RD. They're in format (X,Y) and are extracted from documents using regex. We validate the X and Y values sitting within a certain range ($0 \leq X \leq 300{.}000$; $289{.}000 \leq Y \leq 629{.}000$) to catch any mistakes during extraction. By using the RD coordinates, we implemented a location filter where the user can set a centre point and a radius in meters. Another option besides manually entering the RD coordinate centre point is the place name, which uses the PDOK Locatieserver API. This gives the RD coordinates associated with that place and then uses the same radius filter to exclude files outside the range.
+
+\paragraph{Temporal Filter.}
+Years within the range of 1970-2039 are extracted from the documents using regex. We use a \textit{year\_from} / \textit{year\_to} filter, which excludes documents that do not contain years within this range.
+
+\paragraph{File Metadata Filters.}
+The system also uses the filename as metadata to filter on. It contains a filter on filename and file type (e.g.\ \texttt{pdf}, \texttt{docx}). This way, if users are searching for a specific known file or a certain set of files, this can be done through the system.
 
 
